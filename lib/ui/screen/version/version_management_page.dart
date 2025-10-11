@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xrp_monitor_flutter_admin/ui/layout/common_style.dart';
+import 'package:xrp_monitor_flutter_admin/widgets/base/widget_controller.dart';
+
+part 'version_management_page.controller.dart';
 
 class VersionManagementPage extends HookConsumerWidget {
   const VersionManagementPage({super.key});
@@ -90,40 +93,6 @@ class VersionManagementPage extends HookConsumerWidget {
             ],
           ),
 
-          SizedBox(height: 24),
-
-          // 통계 카드들
-          Row(
-            children: [
-              _buildStatCard(
-                title: '전체 버전',
-                value: versions.length.toString(),
-                icon: Icons.apps,
-                color: const Color(0xFF3B82F6),
-              ),
-              SizedBox(width: 16),
-              _buildStatCard(
-                title: '활성 버전',
-                value: versions.where((v) => v['status'] == '출시됨').length.toString(),
-                icon: Icons.check_circle,
-                color: const Color(0xFF10B981),
-              ),
-              SizedBox(width: 16),
-              _buildStatCard(
-                title: '검토중',
-                value: versions.where((v) => v['status'] == '검토중').length.toString(),
-                icon: Icons.pending,
-                color: const Color(0xFFF59E0B),
-              ),
-              SizedBox(width: 16),
-              _buildStatCard(
-                title: '총 다운로드',
-                value: versions.fold<int>(0, (sum, v) => sum + (v['downloadCount'] as int)).toString(),
-                icon: Icons.download,
-                color: const Color(0xFF8B5CF6),
-              ),
-            ],
-          ),
 
           SizedBox(height: 24),
 
