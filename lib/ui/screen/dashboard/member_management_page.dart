@@ -52,7 +52,7 @@ class MemberManagementPage extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    '회원관리',
+                    '회원 관리',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

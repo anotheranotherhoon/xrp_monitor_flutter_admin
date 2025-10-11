@@ -58,7 +58,7 @@ class DashboardLayout extends HookConsumerWidget {
                         selectedIndex: selectedIndex.value,
                         onTap: () => selectedIndex.value = 0,
                         icon: Icons.people,
-                        title: '회원관리',
+                        title: '회원 관리',
                       ),
                       _buildMenuItem(
                         context,
@@ -216,7 +216,7 @@ class DashboardLayout extends HookConsumerWidget {
   String _getPageTitle(int index) {
     switch (index) {
       case 0:
-        return '회원관리';
+        return '회원 관리';
       case 1:
         return '버전 관리';
       case 2:
