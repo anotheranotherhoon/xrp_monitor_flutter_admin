@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/pagination.dart';
-
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/pagination.dart';
 
 part 'response_model.freezed.dart';
 

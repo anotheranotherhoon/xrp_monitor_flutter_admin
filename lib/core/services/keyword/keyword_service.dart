@@ -1,12 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:intl/intl.dart';
 import 'package:xrp_monitor_flutter_admin/core/constants/api_path.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/api_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_create_request.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_list_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_update_request.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_exception.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_create_request.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_list_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_update_request.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_exception.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/api_service.dart';
 
 part 'keyword_service.g.dart';
@@ -43,7 +42,6 @@ class KeywordService extends _$KeywordService {
             success: true,
             type: ResponseType.success,
             result: keywordData,
-            cursorId: apiResponse.result?.nextCursor
         );
       } else {
         return ResponseModel(success: false, type: ResponseType.alert);

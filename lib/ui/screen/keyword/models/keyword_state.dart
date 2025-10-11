@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword.dart';
 
 
 part 'keyword_state.freezed.dart';

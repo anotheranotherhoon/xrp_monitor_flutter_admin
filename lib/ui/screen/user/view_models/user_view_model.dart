@@ -1,11 +1,10 @@
 import 'dart:developer';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user_list_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user_role.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
-import 'package:xrp_monitor_flutter_admin/service/user/user_service.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/user_service.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/models/user_state.dart';
 
 part 'user_view_model.g.dart';

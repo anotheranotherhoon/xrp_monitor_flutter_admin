@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:xrp_monitor_flutter_admin/core/constants/api_path.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/api_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/api_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/service/authentication/models/auth_model.dart';
 import 'package:xrp_monitor_flutter_admin/service/authentication/models/login_request.dart';
 

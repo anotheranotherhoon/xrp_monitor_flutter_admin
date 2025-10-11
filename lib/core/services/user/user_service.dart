@@ -1,11 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xrp_monitor_flutter_admin/core/constants/api_path.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/api_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user_list_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user_role.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_exception.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_list_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_exception.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/api_service.dart';
 
 part 'user_service.g.dart';

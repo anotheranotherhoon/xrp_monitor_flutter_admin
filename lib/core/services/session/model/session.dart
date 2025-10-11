@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/authentication/token.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/session/model/token.dart';
 import 'package:xrp_monitor_flutter_admin/service/authentication/models/auth_model.dart';
 
 

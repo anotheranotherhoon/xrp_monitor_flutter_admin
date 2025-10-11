@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/pagination.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/pagination.dart';
+
 
 part 'api_response.freezed.dart';
 

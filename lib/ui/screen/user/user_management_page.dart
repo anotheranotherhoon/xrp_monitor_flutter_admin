@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/user/user_role.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/models/user_state.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/view_models/user_view_model.dart';
 

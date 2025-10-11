@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/pagination.dart';
-import '../../../../core/models/api/user/user.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/pagination.dart';
+import '../../../../core/services/user/models/user_model.dart';
 
 part 'user_state.freezed.dart';
 

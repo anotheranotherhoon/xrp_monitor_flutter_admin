@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_create_request.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_list_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/keyword/keyword_update_request.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
-import 'package:xrp_monitor_flutter_admin/service/keyword/keyword_service.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_create_request.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_list_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_update_request.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/keyword_service.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/models/keyword_state.dart';
 
 

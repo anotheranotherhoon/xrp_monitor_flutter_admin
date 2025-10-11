@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'user_role.dart';
 
-part 'user.freezed.dart';
-part 'user.g.dart';
+part 'user_model.freezed.dart';
+part 'user_model.g.dart';
 
 @freezed
 abstract class User with _$User {
@@ -30,3 +30,4 @@ DateTime _dateTimeFromJson(dynamic value) {
   }
   throw ArgumentError('Cannot parse DateTime from $value');
 }
+

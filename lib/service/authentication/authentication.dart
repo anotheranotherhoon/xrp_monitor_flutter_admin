@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/authentication/session.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/api/authentication/token.dart';
-import 'package:xrp_monitor_flutter_admin/core/models/common/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/session/model/session.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/session/model/token.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/session/session_service.dart';
 import 'package:xrp_monitor_flutter_admin/service/storage/local_storage_service.dart';
 import 'models/login_request.dart';
