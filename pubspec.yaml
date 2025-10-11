@@ -1,0 +1,47 @@
+name: xrp_monitor_flutter_admin
+description: "xrp_monitor_flutter_admin"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  intl: any
+  dio: ^5.8.0+1
+  shared_preferences: ^2.5.3
+  http: ^1.4.0
+  flutter_screenutil: ^5.9.3
+  flutter_riverpod: ^2.6.1
+  hooks_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.2
+  flutter_html: ^3.0.0
+  auto_route: ^10.1.0+1
+  freezed_annotation: ^3.0.0
+  jwt_decoder: ^2.0.1
+  mutex: ^3.1.0
+  riverpod_annotation: ^2.6.1
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  auto_route_generator: ^10.1.0
+  build_runner: ^2.5.1
+  riverpod_generator: ^2.4.0
+  riverpod_lint: ^2.3.10
+  freezed: ^3.0.6
+  json_serializable: ^6.8.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/app_icon/
+    - assets/images/icon/
