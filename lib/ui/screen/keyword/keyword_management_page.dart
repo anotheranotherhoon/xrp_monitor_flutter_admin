@@ -44,8 +44,7 @@ class KeywordManagementPage extends HookConsumerWidget {
             );
           },
           loading: () => _buildLoading(),
-          error: (error, stackTrace) => _buildError(error.toString()
-          ),
+          error: (error, stackTrace) => _buildError(error.toString()),
         ),
       ),
     );

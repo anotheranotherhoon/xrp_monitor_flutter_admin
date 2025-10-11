@@ -3,8 +3,6 @@ import 'package:xrp_monitor_flutter_admin/core/constants/api_path.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_create_request.dart';
-import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_list_response.dart';
-import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_update_request.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_exception.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/api_service.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/version/models/version_model.dart';
@@ -21,11 +19,14 @@ class VersionService extends _$VersionService {
 
   }
 
-  Future<ResponseModel<List<Version>>> getAllVersion() async {
+  Future<ResponseModel<List<Version>>> getAllVersion({String? platform}) async {
     try {
-      final response = await _apiService.get(
-          url: '${ApiPath.apiUrl}version/admin/versions'
-      );
+      String url = '${ApiPath.apiUrl}version/admin/versions';
+      if (platform != null && platform.isNotEmpty) {
+        url += '?platform=$platform';
+      }
+      
+      final response = await _apiService.get(url: url);
       if (response.statusCode == 200) {
         final ApiResponse apiResponse = ApiResponse.fromJson(response.data!);
         final List<Version> data = [];

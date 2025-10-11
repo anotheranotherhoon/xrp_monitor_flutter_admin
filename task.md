@@ -1,1 +1,4 @@
-- 
+- GET version/admin/versions API 에 쿼리파라미터로 "platform" : "ios", "platform" : "android" 를 통해서 필터링이 가능하고, 쿼리파라미터로 platform를 주지 않으면, 전체버전이 필터링된다.   
+- veAppStatus 1: 정상, 2:강제업데이트 3: 점검중
+- vePlatform "ios", "android" 값 두개 뿐
+- veDeploymentStatus : "DEPLOYING" : "배포중", "IN_REVIEW" : "심사중", "REVIEW_COMPLETE" : "심사완료", "DEVELOPMENT" : "개발중" 
