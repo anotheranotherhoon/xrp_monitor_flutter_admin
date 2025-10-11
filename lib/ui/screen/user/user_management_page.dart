@@ -38,7 +38,6 @@ class UserManagementPage extends HookConsumerWidget {
         color: Colors.grey[50],
         child: ref.watch(userViewModelProvider).when(
           data: (UserState userState) {
-            print('${userState.users.length} userState.users.length');
             return _buildContent(userState, ref);
           },
           loading: () => _buildLoading(),
