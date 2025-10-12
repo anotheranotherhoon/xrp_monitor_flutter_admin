@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_create_request.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/user_service.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/models/user_state.dart';
@@ -66,5 +67,65 @@ class UserViewModel extends _$UserViewModel {
   // 전체 사용자 조회
   Future<void> fetchAllUsers() async {
     await reset();
+  }
+
+  // 사용자 생성
+  Future<ResponseModel<bool>> createUser(CreateUserRequest request) async {
+    try {
+      final response = await _userService.createUser(request);
+      if (response.success) {
+        // 성공시 데이터 새로고침
+        await reset();
+      }
+      return response;
+    } catch (e) {
+      return ResponseModel<bool>(
+        success: false,
+        result: false,
+        type: ResponseType.alert,
+        title: "사용자 생성 오류",
+        content: e.toString(),
+      );
+    }
+  }
+
+  // 사용자 정보 수정
+  Future<ResponseModel<bool>> updateUser(int id, UpdateUserRequest request) async {
+    try {
+      final response = await _userService.updateUser(id, request);
+      if (response.success) {
+        // 성공시 데이터 새로고침
+        await reset();
+      }
+      return response;
+    } catch (e) {
+      return ResponseModel<bool>(
+        success: false,
+        result: false,
+        type: ResponseType.alert,
+        title: "사용자 수정 오류",
+        content: e.toString(),
+      );
+    }
+  }
+
+  // 사용자 삭제
+  Future<ResponseModel<bool>> deleteUser(int id) async {
+    try {
+      final response = await _userService.deleteUser(id);
+      if (response.success) {
+        // 성공시 데이터 새로고침
+        await reset();
+      }
+      return response;
+    } catch (e) {
+      return ResponseModel<bool>(
+        success: false,
+        result: false,
+        type: ResponseType.alert,
+        title: "사용자 삭제 오류",  
+        content: e.toString(),
+      );
+    }
   }
 }
