@@ -1,8 +1,5 @@
 part of 'keyword_management_page.dart';
 
-final keywordManagementPageControllerProvider = Provider.family<KeywordManagementPageController, WidgetRef>((ref, widgetRef) {
-  return KeywordManagementPageController(ref: widgetRef);
-});
 
 class KeywordManagementPageController extends ConsumerWidgetController<KeywordManagementPage> {
   KeywordManagementPageController ({
@@ -96,9 +93,9 @@ class KeywordManagementPageController extends ConsumerWidgetController<KeywordMa
 
     try {
       final request = KeywordCreateRequest(
-        keyword: keyword,
-        weight: double.parse(weight),
-        type: type,
+        keKeyword: keyword,
+        keWeight: double.parse(weight),
+        keType: type,
       );
 
       final success = await createKeyword(request);
@@ -131,10 +128,10 @@ class KeywordManagementPageController extends ConsumerWidgetController<KeywordMa
 
     try {
       final request = KeywordUpdateRequest(
-        keyword: keyword,
-        weight: double.parse(weight),
-        type: type,
-        isActive: isActive,
+        keKeyword: keyword,
+        keWeight: double.parse(weight),
+        keType: type,
+        keIsActive: isActive,
       );
 
       final success = await updateKeyword(id, request);

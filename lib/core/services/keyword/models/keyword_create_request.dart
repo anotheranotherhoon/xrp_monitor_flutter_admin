@@ -7,9 +7,9 @@ part 'keyword_create_request.g.dart';
 @freezed
 abstract class KeywordCreateRequest with _$KeywordCreateRequest {
   const factory KeywordCreateRequest({
-    required String keyword,
-    required double weight,
-    required KeywordType type,
+    required String keKeyword,
+    required double keWeight,
+    required KeywordType keType,
   }) = _KeywordCreateRequest;
 
   factory KeywordCreateRequest.fromJson(Map<String, dynamic> json) => 

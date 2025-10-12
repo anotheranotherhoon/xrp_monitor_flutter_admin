@@ -29,7 +29,7 @@ class KeywordManagementPage extends HookConsumerWidget {
         elevation: 1,
         actions: [
           TextButton.icon(
-            onPressed: () => _showCreateDialog(context, ref, controller.refresh),
+            onPressed: () => _showCreateDialog(context, ref, controller),
             icon: const Icon(Icons.add, color: Colors.blue),
             label: const Text('키워드 추가', style: TextStyle(color: Colors.blue)),
           ),
@@ -40,8 +40,7 @@ class KeywordManagementPage extends HookConsumerWidget {
         color: Colors.grey[50],
         child: ref.watch(keywordViewModelProvider).when(
           data: (KeywordState keywordState) {
-            return _buildContent(keywordState, ref, controller.refresh
-            );
+            return _buildContent(keywordState, ref, controller);
           },
           loading: () => _buildLoading(),
           error: (error, stackTrace) => _buildError(error.toString()),
@@ -75,10 +74,8 @@ class KeywordManagementPage extends HookConsumerWidget {
   Widget _buildContent(
       KeywordState data,
       WidgetRef ref,
-      VoidCallback refresh
+      KeywordManagementPageController controller
       ) {
-
-
     return Padding(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -94,7 +91,7 @@ class KeywordManagementPage extends HookConsumerWidget {
                     data.positiveKeywords,
                     Colors.green,
                     ref,
-                    refresh
+                    controller
                   ),
                 ),
                 SizedBox(width: 24),
@@ -104,7 +101,7 @@ class KeywordManagementPage extends HookConsumerWidget {
                     data.negativeKeywords,
                     Colors.red,
                     ref,
-                      refresh
+                    controller
                   ),
                 ),
                 SizedBox(width: 24),
@@ -114,7 +111,7 @@ class KeywordManagementPage extends HookConsumerWidget {
                     data.importantKeywords,
                     Colors.orange,
                     ref,
-                      refresh
+                    controller
                   ),
                 ),
               ],
@@ -130,7 +127,7 @@ class KeywordManagementPage extends HookConsumerWidget {
     List<Keyword> keywords,
     Color color,
     WidgetRef ref,
-      VoidCallback refresh
+    KeywordManagementPageController controller
   ) {
     return Container(
       decoration: BoxDecoration(
@@ -205,7 +202,7 @@ class KeywordManagementPage extends HookConsumerWidget {
                     separatorBuilder: (context, index) => SizedBox(height: 8),
                     itemBuilder: (context, index) {
                       final keyword = keywords[index];
-                      return _buildKeywordCard(context, keyword, color, ref, refresh);
+                      return _buildKeywordCard(context, keyword, color, ref, controller);
                     },
                   ),
           ),
@@ -219,7 +216,7 @@ class KeywordManagementPage extends HookConsumerWidget {
     Keyword keyword,
     Color color,
     WidgetRef ref,
-      VoidCallback refresh
+    KeywordManagementPageController controller
   ) {
     return Container(
       padding: EdgeInsets.all(16),
@@ -273,12 +270,12 @@ class KeywordManagementPage extends HookConsumerWidget {
               ),
               const Spacer(),
               InkWell(
-                onTap: () => _showEditDialog(context, ref, keyword, refresh),
+                onTap: () => _showEditDialog(context, ref, controller, keyword),
                 child: Icon(Icons.edit, size: 16, color: Colors.blue),
               ),
               SizedBox(width: 8),
               InkWell(
-                onTap: () => _showDeleteDialog(context, ref, keyword, refresh),
+                onTap: () => _showDeleteDialog(context, ref, controller, keyword),
                 child: Icon(Icons.delete, size: 16, color: Colors.red),
               ),
             ],
@@ -288,11 +285,12 @@ class KeywordManagementPage extends HookConsumerWidget {
     );
   }
 
-  void _showCreateDialog(BuildContext context, WidgetRef ref, VoidCallback refresh) {
+  void _showCreateDialog(BuildContext context, WidgetRef ref, KeywordManagementPageController controller) {
     showDialog(
       context: context,
       builder: (context) => _CreateKeywordDialog(
-        onCreated: refresh,
+        controller: controller,
+        onCreated: controller.refresh,
       ),
     );
   }
@@ -300,24 +298,19 @@ class KeywordManagementPage extends HookConsumerWidget {
   void _showEditDialog(
     BuildContext context,
     WidgetRef ref,
+    KeywordManagementPageController controller,
     Keyword keyword,
-    VoidCallback refresh,
   ) {
-    showDialog(
-      context: context,
+    showDialog(context: context,
       builder: (context) => _EditKeywordDialog(
+        controller: controller,
         keyword: keyword,
-        onUpdated: refresh,
+        onUpdated: controller.refresh,
       ),
     );
   }
 
-  void _showDeleteDialog(
-    BuildContext context,
-    WidgetRef ref,
-    Keyword keyword,
-    VoidCallback refresh,
-  ) {
+  void _showDeleteDialog(BuildContext context, WidgetRef ref, KeywordManagementPageController controller, Keyword keyword) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -331,8 +324,18 @@ class KeywordManagementPage extends HookConsumerWidget {
           TextButton(
             onPressed: () async {
               Navigator.of(dialogContext).pop();
-              final controller = ref.read(keywordManagementPageControllerProvider(ref));
-              await controller.handleDeleteKeyword(context, keyword.key, keyword.keyword);
+              final success = await controller.deleteKeyword(keyword.key);
+              if (!context.mounted) return;
+              
+              if (success) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('키워드가 삭제되었습니다')),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('키워드 삭제에 실패했습니다')),
+                );
+              }
             },
             child: const Text('삭제', style: TextStyle(color: Colors.red)),
           ),
@@ -343,9 +346,10 @@ class KeywordManagementPage extends HookConsumerWidget {
 }
 
 class _CreateKeywordDialog extends ConsumerStatefulWidget {
+  final KeywordManagementPageController controller;
   final VoidCallback onCreated;
 
-  const _CreateKeywordDialog({required this.onCreated});
+  const _CreateKeywordDialog({required this.controller, required this.onCreated});
 
   @override
   ConsumerState<_CreateKeywordDialog> createState() => _CreateKeywordDialogState();
@@ -420,14 +424,27 @@ class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
         ),
         TextButton(
           onPressed: () async {
-            final controller = ref.read(keywordManagementPageControllerProvider(ref));
-            await controller.handleCreateKeyword(
-              context,
-              keywordController.text,
-              weightController.text,
-              selectedType,
-              widget.onCreated,
+            final request = KeywordCreateRequest(
+              keKeyword: keywordController.text,
+              keWeight: (double.tryParse(weightController.text) ?? 0).toDouble(),
+              keType: selectedType,
             );
+            
+            final success = await widget.controller.createKeyword(request);
+            
+            if (!context.mounted) return;
+            
+            if (success) {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('키워드가 생성되었습니다')),
+              );
+              widget.onCreated();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('키워드 생성에 실패했습니다')),
+              );
+            }
           },
           child: const Text('생성'),
         ),
@@ -437,10 +454,12 @@ class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
 }
 
 class _EditKeywordDialog extends ConsumerStatefulWidget {
+  final KeywordManagementPageController controller;
   final Keyword keyword;
   final VoidCallback onUpdated;
 
   const _EditKeywordDialog({
+    required this.controller,
     required this.keyword,
     required this.onUpdated,
   });
@@ -544,16 +563,28 @@ class _EditKeywordDialogState extends ConsumerState<_EditKeywordDialog> {
         ),
         TextButton(
           onPressed: () async {
-            final controller = ref.read(keywordManagementPageControllerProvider(ref));
-            await controller.handleUpdateKeyword(
-              context,
-              widget.keyword.key,
-              keywordController.text,
-              weightController.text,
-              selectedType,
-              isActive,
-              widget.onUpdated,
+            final request = KeywordUpdateRequest(
+              keKeyword: keywordController.text,
+              keWeight: (double.tryParse(weightController.text) ?? 0).toDouble(),
+              keType: selectedType,
+              keIsActive: isActive,
             );
+            
+            final success = await widget.controller.updateKeyword(widget.keyword.key, request);
+            
+            if (!context.mounted) return;
+            
+            if (success) {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('키워드가 수정되었습니다')),
+              );
+              widget.onUpdated();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('키워드 수정에 실패했습니다')),
+              );
+            }
           },
           child: const Text('수정'),
         ),

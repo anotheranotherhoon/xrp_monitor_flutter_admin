@@ -7,10 +7,10 @@ part 'keyword_update_request.g.dart';
 @freezed
 abstract class KeywordUpdateRequest with _$KeywordUpdateRequest {
   const factory KeywordUpdateRequest({
-    required String keyword,
-    required double weight,
-    required KeywordType type,
-    required bool isActive,
+    required String keKeyword,
+    required double keWeight,
+    required KeywordType keType,
+    required bool keIsActive,
   }) = _KeywordUpdateRequest;
 
   factory KeywordUpdateRequest.fromJson(Map<String, dynamic> json) => 
