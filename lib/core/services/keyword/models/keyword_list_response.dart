@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'keyword.dart';
+import 'keyword_model.dart';
 
 part 'keyword_list_response.freezed.dart';
 part 'keyword_list_response.g.dart';

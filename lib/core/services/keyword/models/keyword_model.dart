@@ -2,8 +2,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'keyword_type.dart';
 
-part 'keyword.freezed.dart';
-part 'keyword.g.dart';
+part 'keyword_model.freezed.dart';
+part 'keyword_model.g.dart';
 
 @freezed
 abstract class Keyword with _$Keyword {

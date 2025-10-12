@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_create_request.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_type.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_update_request.dart';
+import 'package:xrp_monitor_flutter_admin/ui/layout/common_style.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/models/keyword_state.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/view_models/keyword_view_model.dart';
 import 'package:xrp_monitor_flutter_admin/widgets/base/widget_controller.dart';
@@ -28,10 +29,15 @@ class KeywordManagementPage extends HookConsumerWidget {
         foregroundColor: Colors.black87,
         elevation: 1,
         actions: [
-          TextButton.icon(
+          ElevatedButton.icon(
             onPressed: () => _showCreateDialog(context, ref, controller),
-            icon: const Icon(Icons.add, color: Colors.blue),
-            label: const Text('키워드 추가', style: TextStyle(color: Colors.blue)),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('키워드 추가', style: TextStyle(fontSize: 12),),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF3B82F6),
+              foregroundColor: CommonColors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
           ),
           SizedBox(width: 16),
         ],
@@ -369,7 +375,6 @@ class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       title: const Text('키워드 추가'),
       content: SizedBox(
@@ -422,7 +427,7 @@ class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('취소'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () async {
             final request = KeywordCreateRequest(
               keKeyword: keywordController.text,
@@ -561,7 +566,7 @@ class _EditKeywordDialogState extends ConsumerState<_EditKeywordDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('취소'),
         ),
-        TextButton(
+        ElevatedButton(
           onPressed: () async {
             final request = KeywordUpdateRequest(
               keKeyword: keywordController.text,

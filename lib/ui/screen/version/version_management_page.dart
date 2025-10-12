@@ -469,7 +469,7 @@ class VersionManagementPage extends HookConsumerWidget {
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
           title: Text('새 버전 추가'),
-          content: Container(
+          content: SizedBox(
             width: 500,
             child: Form(
               key: formKey,
