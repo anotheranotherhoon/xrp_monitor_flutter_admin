@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_create_request.dart';
@@ -194,7 +195,7 @@ class UserManagementPage extends HookConsumerWidget {
         itemCount: users.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
         itemBuilder: (context, index) {
-          final user = users[index];
+          final User user = users[index];
           return _buildUserCard(context, user, ref, controller);
         },
       ),
@@ -307,10 +308,10 @@ class UserManagementPage extends HookConsumerWidget {
 
   // 사용자 생성 다이얼로그
   Future<void> _showCreateUserDialog(BuildContext context, UserManagementPageController controller) async {
-    final formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final nicknameController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    final TextEditingController nicknameController = TextEditingController();
     
     return showDialog(
       context: context,
@@ -354,13 +355,13 @@ class UserManagementPage extends HookConsumerWidget {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState?.validate() == true) {
-                final request = CreateUserRequest(
+                final CreateUserRequest request = CreateUserRequest(
                   meEmail: emailController.text,
                   mePassword: passwordController.text,
                   meNickname: nicknameController.text,
                 );
                 
-                final success = await controller.createUser(request);
+                final bool success = await controller.createUser(request);
                 
                 if (!context.mounted) return;
                 
@@ -385,8 +386,8 @@ class UserManagementPage extends HookConsumerWidget {
 
   // 사용자 수정 다이얼로그
   Future<void> _showEditUserDialog(BuildContext context, UserManagementPageController controller, User user) async {
-    final formKey = GlobalKey<FormState>();
-    final nicknameController = TextEditingController(text: user.nickname ?? '');
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final TextEditingController nicknameController = TextEditingController(text: user.nickname ?? '');
     
     return showDialog(
       context: context,
@@ -422,11 +423,11 @@ class UserManagementPage extends HookConsumerWidget {
           ElevatedButton(
             onPressed: () async {
               if (formKey.currentState?.validate() == true) {
-                final request = UpdateUserRequest(
+                final UpdateUserRequest request = UpdateUserRequest(
                   meNickname: nicknameController.text,
                 );
                 
-                final success = await controller.updateUser(user.key, request);
+                final bool success = await controller.updateUser(user.key, request);
                 
                 if (!context.mounted) return;
                 
@@ -463,7 +464,7 @@ class UserManagementPage extends HookConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              final success = await controller.deleteUser(user.key);
+              final bool success = await controller.deleteUser(user.key);
               
               if (!context.mounted) return;
               

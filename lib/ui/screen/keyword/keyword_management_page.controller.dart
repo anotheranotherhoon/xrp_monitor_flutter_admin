@@ -18,7 +18,7 @@ class KeywordManagementPageController extends ConsumerWidgetController<KeywordMa
   // 키워드 생성
   Future<bool> createKeyword(KeywordCreateRequest request) async {
     try {
-      final result = await ref.read(keywordViewModelProvider.notifier).createKeyword(request);
+      final ResponseModel<bool> result = await ref.read(keywordViewModelProvider.notifier).createKeyword(request);
       if (result.success) {
         refresh();
         return true;
@@ -32,7 +32,7 @@ class KeywordManagementPageController extends ConsumerWidgetController<KeywordMa
   // 키워드 수정
   Future<bool> updateKeyword(int id, KeywordUpdateRequest request) async {
     try {
-      final result = await ref.read(keywordViewModelProvider.notifier).updateKeyword(id, request);
+      final ResponseModel<bool> result = await ref.read(keywordViewModelProvider.notifier).updateKeyword(id, request);
       if (result.success) {
         refresh();
         return true;
@@ -46,7 +46,7 @@ class KeywordManagementPageController extends ConsumerWidgetController<KeywordMa
   // 키워드 삭제
   Future<bool> deleteKeyword(int id) async {
     try {
-      final result = await ref.read(keywordViewModelProvider.notifier).deleteKeyword(id);
+      final ResponseModel<bool> result = await ref.read(keywordViewModelProvider.notifier).deleteKeyword(id);
       if (result.success) {
         refresh();
         return true;

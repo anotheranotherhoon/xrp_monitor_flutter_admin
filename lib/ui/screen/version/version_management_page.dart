@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/ui/layout/common_style.dart';
 import 'package:xrp_monitor_flutter_admin/widgets/base/widget_controller.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/version/view_models/version_view_model.dart';
@@ -14,11 +15,11 @@ class VersionManagementPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedTab = useState<int>(0);
+    final ValueNotifier<int> selectedTab = useState<int>(0);
     
     // 탭 변경 시 API 요청
     useEffect(() {
-      final platform = selectedTab.value == 0 ? null : 
+      final String? platform = selectedTab.value == 0 ? null : 
                       selectedTab.value == 1 ? 'android' : 'ios';
       
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -450,15 +451,15 @@ class VersionManagementPage extends HookConsumerWidget {
 
   // 버전 생성 다이얼로그
   Future<void> _showCreateVersionDialog(BuildContext context, WidgetRef ref, ValueNotifier<int> selectedTab) async {
-    final formKey = GlobalKey<FormState>();
-    final versionController = TextEditingController();
-    final platformController = TextEditingController(text: 'android');
-    final minimumVersionController = TextEditingController();
-    final releaseNotesController = TextEditingController();
-    final downloadUrlController = TextEditingController();
-    final apiDomainController = TextEditingController();
-    final reviewVersionController = TextEditingController();
-    final shorebirdVersionController = TextEditingController();
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final TextEditingController versionController = TextEditingController();
+    final TextEditingController platformController = TextEditingController(text: 'android');
+    final TextEditingController minimumVersionController = TextEditingController();
+    final TextEditingController releaseNotesController = TextEditingController();
+    final TextEditingController downloadUrlController = TextEditingController();
+    final TextEditingController apiDomainController = TextEditingController();
+    final TextEditingController reviewVersionController = TextEditingController();
+    final TextEditingController shorebirdVersionController = TextEditingController();
     
     int appStatus = 1;
     bool isActive = true;
@@ -564,7 +565,7 @@ class VersionManagementPage extends HookConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 if (formKey.currentState?.validate() == true) {
-                  final params = CreateVersionParams(
+                  final CreateVersionParams params = CreateVersionParams(
                     veVersion: versionController.text,
                     vePlatform: platformController.text,
                     veMinimumVersion: minimumVersionController.text,
@@ -578,8 +579,8 @@ class VersionManagementPage extends HookConsumerWidget {
                     veDeploymentStatus: deploymentStatus,
                   );
                   
-                  final viewModel = ref.read(versionViewModelProvider.notifier);
-                  final result = await viewModel.createVersion(params);
+                  final VersionViewModel viewModel = ref.read(versionViewModelProvider.notifier);
+                  final ResponseModel<bool> result = await viewModel.createVersion(params);
                   
                   if (result.success) {
                     Navigator.pop(context);
@@ -588,16 +589,16 @@ class VersionManagementPage extends HookConsumerWidget {
                                     selectedTab.value == 1 ? 'android' : 'ios';
                     ref.read(versionViewModelProvider.notifier).fetchVersionsByPlatform(platform);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('버전이 생성되었습니다')),
+                      const SnackBar(content: Text('버전이 생성되었습니다')),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('버전 생성에 실패했습니다')),
+                      const SnackBar(content: Text('버전 생성에 실패했습니다')),
                     );
                   }
                 }
               },
-              child: Text('생성'),
+              child: const Text('생성'),
             ),
           ],
         ),
@@ -607,15 +608,15 @@ class VersionManagementPage extends HookConsumerWidget {
 
   // 버전 수정 다이얼로그
   Future<void> _showEditVersionDialog(BuildContext context, WidgetRef ref, Version version, ValueNotifier<int> selectedTab) async {
-    final formKey = GlobalKey<FormState>();
-    final versionController = TextEditingController(text: version.version);
-    final platformController = TextEditingController(text: version.platform);
-    final minimumVersionController = TextEditingController(text: version.minimumVersion);
-    final releaseNotesController = TextEditingController(text: version.releaseNotes);
-    final downloadUrlController = TextEditingController(text: version.downloadUrl);
-    final apiDomainController = TextEditingController(text: version.apiDomain);
-    final reviewVersionController = TextEditingController(text: version.reviewVersion);
-    final shorebirdVersionController = TextEditingController(text: version.shorebirdVersion);
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    final TextEditingController versionController = TextEditingController(text: version.version);
+    final TextEditingController platformController = TextEditingController(text: version.platform);
+    final TextEditingController minimumVersionController = TextEditingController(text: version.minimumVersion);
+    final TextEditingController releaseNotesController = TextEditingController(text: version.releaseNotes);
+    final TextEditingController downloadUrlController = TextEditingController(text: version.downloadUrl);
+    final TextEditingController apiDomainController = TextEditingController(text: version.apiDomain);
+    final TextEditingController reviewVersionController = TextEditingController(text: version.reviewVersion);
+    final TextEditingController shorebirdVersionController = TextEditingController(text: version.shorebirdVersion);
     
     int appStatus = version.appStatus;
     bool isActive = version.isActive;
@@ -721,7 +722,7 @@ class VersionManagementPage extends HookConsumerWidget {
             ElevatedButton(
               onPressed: () async {
                 if (formKey.currentState?.validate() == true) {
-                  final params = CreateVersionParams(
+                  final CreateVersionParams params = CreateVersionParams(
                     veVersion: versionController.text,
                     vePlatform: platformController.text,
                     veMinimumVersion: minimumVersionController.text,
@@ -735,8 +736,8 @@ class VersionManagementPage extends HookConsumerWidget {
                     veDeploymentStatus: deploymentStatus,
                   );
                   
-                  final viewModel = ref.read(versionViewModelProvider.notifier);
-                  final result = await viewModel.updateVersion(version.key, params);
+                  final VersionViewModel viewModel = ref.read(versionViewModelProvider.notifier);
+                  final ResponseModel<bool> result = await viewModel.updateVersion(version.key, params);
                   
                   if (result.success) {
                     Navigator.pop(context);
@@ -745,16 +746,16 @@ class VersionManagementPage extends HookConsumerWidget {
                                     selectedTab.value == 1 ? 'android' : 'ios';
                     ref.read(versionViewModelProvider.notifier).fetchVersionsByPlatform(platform);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('버전이 수정되었습니다')),
+                      const SnackBar(content: Text('버전이 수정되었습니다')),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('버전 수정에 실패했습니다')),
+                      const SnackBar(content: Text('버전 수정에 실패했습니다')),
                     );
                   }
                 }
               },
-              child: Text('수정'),
+              child: const Text('수정'),
             ),
           ],
         ),

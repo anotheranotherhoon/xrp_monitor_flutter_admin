@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
+import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_create_request.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/keyword/models/keyword_type.dart';
@@ -207,7 +209,7 @@ class KeywordManagementPage extends HookConsumerWidget {
                     itemCount: keywords.length,
                     separatorBuilder: (context, index) => SizedBox(height: 8),
                     itemBuilder: (context, index) {
-                      final keyword = keywords[index];
+                      final Keyword keyword = keywords[index];
                       return _buildKeywordCard(context, keyword, color, ref, controller);
                     },
                   ),
@@ -330,7 +332,7 @@ class KeywordManagementPage extends HookConsumerWidget {
           TextButton(
             onPressed: () async {
               Navigator.of(dialogContext).pop();
-              final success = await controller.deleteKeyword(keyword.key);
+              final bool success = await controller.deleteKeyword(keyword.key);
               if (!context.mounted) return;
               
               if (success) {
@@ -362,8 +364,8 @@ class _CreateKeywordDialog extends ConsumerStatefulWidget {
 }
 
 class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
-  final keywordController = TextEditingController();
-  final weightController = TextEditingController();
+  final TextEditingController keywordController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
   KeywordType selectedType = KeywordType.POSITIVE;
 
   @override
@@ -429,13 +431,13 @@ class _CreateKeywordDialogState extends ConsumerState<_CreateKeywordDialog> {
         ),
         ElevatedButton(
           onPressed: () async {
-            final request = KeywordCreateRequest(
+            final KeywordCreateRequest request = KeywordCreateRequest(
               keKeyword: keywordController.text,
               keWeight: (double.tryParse(weightController.text) ?? 0).toDouble(),
               keType: selectedType,
             );
             
-            final success = await widget.controller.createKeyword(request);
+            final bool success = await widget.controller.createKeyword(request);
             
             if (!context.mounted) return;
             
@@ -568,14 +570,14 @@ class _EditKeywordDialogState extends ConsumerState<_EditKeywordDialog> {
         ),
         ElevatedButton(
           onPressed: () async {
-            final request = KeywordUpdateRequest(
+            final KeywordUpdateRequest request = KeywordUpdateRequest(
               keKeyword: keywordController.text,
               keWeight: (double.tryParse(weightController.text) ?? 0).toDouble(),
               keType: selectedType,
               keIsActive: isActive,
             );
             
-            final success = await widget.controller.updateKeyword(widget.keyword.key, request);
+            final bool success = await widget.controller.updateKeyword(widget.keyword.key, request);
             
             if (!context.mounted) return;
             

@@ -10,7 +10,7 @@ import 'package:xrp_monitor_flutter_admin/utils/validators.dart';
 import 'package:xrp_monitor_flutter_admin/widgets/auth/auth_button.dart';
 import 'package:xrp_monitor_flutter_admin/widgets/auth/auth_text_field.dart';
 import 'package:xrp_monitor_flutter_admin/widgets/base/widget_controller.dart';
-import '../../../core/route/app_router.gr.dart';
+import 'package:xrp_monitor_flutter_admin/core/route/app_router.gr.dart';
 part 'login_screen.controller.dart';
 
 @RoutePage()
