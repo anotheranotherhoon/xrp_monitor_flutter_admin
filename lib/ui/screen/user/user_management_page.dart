@@ -71,6 +71,7 @@ class UserManagementPage extends HookConsumerWidget {
   }
 
   Widget _buildContent(UserState userState, WidgetRef ref) {
+    print('userState.users ${userState.users}');
     if (userState.users.isEmpty) {
       return _buildEmptyState();
     }
@@ -242,7 +243,7 @@ class UserManagementPage extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '가입일: ${_formatDate(user.createdAt)}',
+                  '가입일: ${user.createdAt}',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[500],

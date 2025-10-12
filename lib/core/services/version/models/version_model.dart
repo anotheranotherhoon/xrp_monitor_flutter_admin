@@ -9,21 +9,21 @@ part 'version_model.g.dart';
 abstract class Version with _$Version {
   const factory Version({
     @JsonKey(name: 'veIdx') @Default(0) int key,
-    @JsonKey(name: 'veVersion') @Default('') String version,
-    @JsonKey(name: 'veMinimumVersion') @Default('') String minimumVersion,
-    @JsonKey(name: 'vePlatform') @Default('') String platform,
+    @JsonKey(name: 'veVersion') @Default("") String version,
+    @JsonKey(name: 'veMinimumVersion') @Default("") String minimumVersion,
+    @JsonKey(name: 'vePlatform') @Default("") String platform,
     @JsonKey(name: 'veAppStatus') @Default(0) int appStatus,
-    @JsonKey(name: 'veReleaseNotes') @Default('') String releaseNotes,
+    @JsonKey(name: 'veReleaseNotes') @Default("") String releaseNotes,
 
-    @JsonKey(name: 'veDownloadUrl') @Default('') String downloadUrl,
-    @JsonKey(name: 'veApiDomain') @Default('') String apiDomain,
+    @JsonKey(name: 'veDownloadUrl') @Default("") String downloadUrl,
+    @JsonKey(name: 'veApiDomain') @Default("") String apiDomain,
     @JsonKey(name: 'veIsActive') @Default(false) bool isActive,
 
-    @JsonKey(name: 'veReviewVersion') @Default('') String reviewVersion,
-    @JsonKey(name: 'veShorebirdVersion') @Default('') String shorebirdVersion,
-    @JsonKey(name: 'veDeploymentStatus') @Default('') String deploymentStatus,
+    @JsonKey(name: 'veReviewVersion') @Default("") String reviewVersion,
+    @JsonKey(name: 'veShorebirdVersion') @Default("") String shorebirdVersion,
+    @JsonKey(name: 'veDeploymentStatus') @Default("") String deploymentStatus,
 
-    @JsonKey(name: 'createdAt') @Default('') String createdAt,
+    @JsonKey(name: 'createdAt') @Default("") String createdAt,
   }) = _Version;
 
   const Version._();

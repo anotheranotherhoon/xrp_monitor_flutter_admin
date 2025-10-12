@@ -4,15 +4,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/keyword_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/user_management_page.dart';
-import '../version/version_management_page.dart';
+import 'package:xrp_monitor_flutter_admin/ui/screen/version/version_management_page.dart';
 
 @RoutePage()
-class DashboardLayout extends HookConsumerWidget {
-  const DashboardLayout({super.key});
+class DashboardScreen extends HookConsumerWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedIndex = useState<int>(0);
+    final ValueNotifier<int> selectedIndex = useState<int>(0);
     
     return Scaffold(
       body: Row(

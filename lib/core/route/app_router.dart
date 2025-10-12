@@ -51,7 +51,7 @@ class AppRouter extends RootStackRouter {
 
     // Dashboard routes
     AutoRoute(
-      page: DashboardLayout.page,
+      page: DashboardRoute.page,
       path: '/dashboard',
       guards: authGuards,
     ),

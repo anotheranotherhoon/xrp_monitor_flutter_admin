@@ -332,7 +332,7 @@ class KeywordManagementPage extends HookConsumerWidget {
             onPressed: () async {
               Navigator.of(dialogContext).pop();
               final controller = ref.read(keywordManagementPageControllerProvider(ref));
-              await controller.handleDeleteKeyword(context, keyword.id, keyword.keyword);
+              await controller.handleDeleteKeyword(context, keyword.key, keyword.keyword);
             },
             child: const Text('삭제', style: TextStyle(color: Colors.red)),
           ),
@@ -547,7 +547,7 @@ class _EditKeywordDialogState extends ConsumerState<_EditKeywordDialog> {
             final controller = ref.read(keywordManagementPageControllerProvider(ref));
             await controller.handleUpdateKeyword(
               context,
-              widget.keyword.id,
+              widget.keyword.key,
               keywordController.text,
               weightController.text,
               selectedType,

@@ -31,7 +31,7 @@ class LoginScreenController extends ConsumerWidgetController<LoginScreen> {
       if (result.success) {
         // 로그인 성공시 토스트 없이 바로 화면 전환 (화면 전환 자체가 성공 피드백)
         if (context.mounted) {
-          context.router.replaceAll([const DashboardLayout()]);
+          context.router.replaceAll([const DashboardRoute()]);
         }
       } else {
         // _showSafeToast(context, AppStrings.loginFailure);
