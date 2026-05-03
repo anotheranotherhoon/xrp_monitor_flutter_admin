@@ -23,7 +23,7 @@ class KeywordService extends _$KeywordService {
   Future<ResponseModel<KeywordListResponse>> getAllKeywords() async {
     try {
       final response = await _apiService.get(
-          url: '${ApiPath.apiUrl}keyword/admin/all'
+          url: '${ApiPath.apiUrl}admin/keyword'
       );
       if (response.statusCode == 200) {
         final ApiResponse apiResponse = ApiResponse.fromJson(response.data!);
@@ -61,7 +61,7 @@ class KeywordService extends _$KeywordService {
   Future<ResponseModel<bool>> createKeyword(KeywordCreateRequest request) async {
    try {
      final response = await _apiService.post(
-       url: '${ApiPath.apiUrl}keyword/admin',
+       url: '${ApiPath.apiUrl}admin/keyword',
        params: request.toJson(),
      );
      if (response.statusCode == 201) {
@@ -99,7 +99,7 @@ class KeywordService extends _$KeywordService {
       ) async {
     try{
       final response = await _apiService.put(
-        url: '${ApiPath.apiUrl}keyword/admin/$id',
+        url: '${ApiPath.apiUrl}admin/keyword/$id',
         params: request.toJson(),
       );
       if (response.statusCode == 200) {
@@ -134,7 +134,7 @@ class KeywordService extends _$KeywordService {
   Future<ResponseModel<bool>> deleteKeyword(int id) async {
     try{
       final response = await _apiService.delete(
-          url: '${ApiPath.apiUrl}keyword/admin/$id'
+          url: '${ApiPath.apiUrl}admin/keyword/$id'
       );
       if (response.statusCode == 200) {
         final ApiResponse apiResponse = ApiResponse.fromJson(response.data!);

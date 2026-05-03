@@ -21,7 +21,7 @@ class VersionService extends _$VersionService {
 
   Future<ResponseModel<List<Version>>> getAllVersion({String? platform}) async {
     try {
-      String url = '${ApiPath.apiUrl}version/admin/versions';
+      String url = '${ApiPath.apiUrl}admin/version';
       if (platform != null && platform.isNotEmpty) {
         url += '?platform=$platform';
       }
@@ -56,7 +56,7 @@ class VersionService extends _$VersionService {
   Future<ResponseModel<bool>> createVersion(CreateVersionParams request) async {
     try {
       final response = await _apiService.post(
-        url: '${ApiPath.apiUrl}version/admin/versions',
+        url: '${ApiPath.apiUrl}admin/version',
         params: request.toJson(),
       );
       if (response.statusCode == 201) {
@@ -91,7 +91,7 @@ class VersionService extends _$VersionService {
   Future<ResponseModel<bool>> updateVersion(int id, CreateVersionParams request,) async {
     try{
       final response = await _apiService.put(
-        url: '${ApiPath.apiUrl}version/admin/versions/$id',
+        url: '${ApiPath.apiUrl}admin/version/$id',
         params: request.toJson(),
       );
       if (response.statusCode == 200) {
@@ -126,7 +126,7 @@ class VersionService extends _$VersionService {
   Future<ResponseModel<bool>> deleteVersion(int id) async {
     try{
       final response = await _apiService.delete(
-          url: '${ApiPath.apiUrl}version/admin/versions/$id'
+          url: '${ApiPath.apiUrl}admin/version/$id'
       );
       if (response.statusCode == 200) {
         final ApiResponse apiResponse = ApiResponse.fromJson(response.data!);
