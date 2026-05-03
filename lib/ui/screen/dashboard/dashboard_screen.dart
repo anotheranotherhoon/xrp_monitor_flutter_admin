@@ -5,6 +5,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/keyword_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/user_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/version/version_management_page.dart';
+import 'package:xrp_monitor_flutter_admin/service/authentication/authentication.dart';
+import 'package:xrp_monitor_flutter_admin/core/route/app_router.gr.dart';
 
 @RoutePage()
 class DashboardScreen extends HookConsumerWidget {
@@ -85,9 +87,7 @@ class DashboardScreen extends HookConsumerWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: 로그아웃 구현
-                      },
+                      onPressed: () => _showLogoutDialog(context, ref),
                       icon: const Icon(
                         Icons.logout,
                         size: 16,
@@ -236,5 +236,62 @@ class DashboardScreen extends HookConsumerWidget {
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            '로그아웃',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: const Text(
+            '정말 로그아웃하시겠습니까?',
+            style: TextStyle(fontSize: 14),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFF6B7280),
+              ),
+              child: const Text(
+                '취소',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                final auth = ref.read(authenticationProvider.notifier);
+                await auth.logout();
+                if (context.mounted) {
+                  context.router.replaceAll([const LoginRoute()]);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                '로그아웃',
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

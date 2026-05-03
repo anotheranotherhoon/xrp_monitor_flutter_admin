@@ -6,9 +6,9 @@ enum ServerType {
 
 class ApiPath {
 
-  static const String devDomain = 'http://localhost:3000';
-  static const String betaDomain = 'http://localhost:3000';
-  static const String prodDomain = 'http://localhost:3000';
+  static const String devDomain = 'http://168.107.30.242:3000';
+  static const String betaDomain = 'http://168.107.30.242:3000';
+  static const String prodDomain = 'http://168.107.30.242:3000';
 
 
   static ServerType currentServer = ServerType.dev;

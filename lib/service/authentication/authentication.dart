@@ -113,5 +113,9 @@ class Authentication extends _$Authentication {
     }
   }
 
+  Future<void> logout() async {
+    removeSession();
+  }
+
 
 }
