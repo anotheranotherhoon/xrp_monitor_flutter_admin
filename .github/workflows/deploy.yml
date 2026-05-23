@@ -1,0 +1,42 @@
+name: Deploy Flutter Web to Oracle Cloud
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Build Flutter Web
+        run: flutter build web
+
+      - name: Deploy to VM
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USERNAME }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          script: |
+            rm -rf ~/flutter-web/web
+            mkdir -p ~/flutter-web/web
+
+      - name: Copy files to VM
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USERNAME }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          source: "build/web/*"
+          target: "~/flutter-web/web"
+          strip_components: 2
