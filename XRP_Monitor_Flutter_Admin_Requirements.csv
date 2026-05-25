@@ -1,0 +1,72 @@
+요구사항ID,요구사항명,하위 요구사항ID,하위 요구사항명,상세 설명
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-01,관리자 로그인,이메일과 비밀번호로 관리자 계정에 로그인하여 JWT 토큰을 발급받는다. 로그인 실패 시 에러 메시지를 표시한다.
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-02,JWT 토큰 자동 갱신,AuthInterceptor를 통해 HTTP 401 응답을 감지하고 refreshToken으로 accessToken을 자동 갱신한다.
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-03,토큰 갱신 재시도,토큰 갱신 성공 시 원본 API 요청을 새로운 accessToken으로 자동 재시도한다.
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-04,리프레시 토큰 만료 처리,refreshToken이 만료되거나 없을 경우 자동으로 로그인 화면으로 리다이렉트한다.
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-05,로컬 세션 복원,앱 시작 시 LocalStorageService를 통해 저장된 토큰으로 세션을 복원한다.
+REQ-ADM-001,관리자 인증 및 세션 관리,REQ-ADM-001-06,로그아웃,현재 세션을 종료하고 로컬 저장된 모든 토큰을 삭제한다.
+REQ-ADM-002,라우팅 및 네비게이션,REQ-ADM-002-01,Auto Route 기반 라우팅,AutoRouter와 AppRouterConfig를 통해 선언적 라우팅을 관리한다.
+REQ-ADM-002,라우팅 및 네비게이션,REQ-ADM-002-02,인증 가드,AuthGuard를 통해 인증되지 않은 사용자의 보호된 페이지 접근을 차단한다.
+REQ-ADM-002,라우팅 및 네비게이션,REQ-ADM-002-03,대시보드 네비게이션,로그인 후 대시보드로 자동 이동하며 인증 실패 시 로그인 페이지로 리다이렉트한다.
+REQ-ADM-003,대시보드 레이아웃,REQ-ADM-003-01,사이드바 메뉴,좌측 사이드바에 회원 관리 버전 관리 키워드 관리 메뉴를 제공한다.
+REQ-ADM-003,대시보드 레이아웃,REQ-ADM-003-02,메뉴 선택 상태,현재 선택된 메뉴를 시각적으로 강조하고 메뉴 클릭 시 해당 페이지를 표시한다.
+REQ-ADM-003,대시보드 레이아웃,REQ-ADM-003-03,상단 헤더,현재 페이지 제목과 사용자 프로필 아이콘을 표시하는 상단 헤더를 제공한다.
+REQ-ADM-003,대시보드 레이아웃,REQ-ADM-003-04,메인 콘텐츠 영역,선택된 메뉴에 따라 회원 관리 버전 관리 키워드 관리 페이지를 동적으로 표시한다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-01,회원 목록 조회,UserService를 통해 서버에서 회원 목록을 조회하고 페이지네이션을 지원한다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-02,회원 생성,UserCreateRequest를 통해 새로운 회원을 생성한다. 이메일 닉네임 역할을 입력받는다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-03,회원 수정,기존 회원의 정보(닉네임 역할 활성화 상태)를 수정할 수 있다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-04,회원 삭제,선택한 회원을 시스템에서 삭제할 수 있다. 삭제 전 확인 다이얼로그를 표시한다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-05,회원 역할 관리,UserRole(USER ADMIN SUPER_ADMIN) 중 하나로 회원의 권한을 설정한다.
+REQ-ADM-004,회원 관리,REQ-ADM-004-06,회원 활성화 상태 관리,회원의 활성화/비활성화 상태를 토글할 수 있다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-01,앱 버전 목록 조회,VersionService를 통해 등록된 앱 버전 목록을 조회하고 표시한다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-02,새 버전 등록,새로운 앱 버전을 등록한다. 버전 번호 플랫폼 최소 지원 버전 앱 상태를 입력받는다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-03,버전 정보 수정,기존 버전의 릴리스 노트 다운로드 URL API 도메인 등을 수정한다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-04,버전 활성화 관리,특정 버전의 활성화/비활성화 상태를 관리한다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-05,플랫폼별 버전 관리,Android iOS 플랫폼별로 독립적인 버전 관리를 지원한다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-06,앱 상태 관리,앱의 운영 상태(정상 점검 업데이트 필수 등)를 관리한다.
+REQ-ADM-005,버전 관리,REQ-ADM-005-07,Shorebird 패치 관리,Shorebird 버전과 배포 상태를 관리한다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-01,키워드 목록 조회,KeywordService를 통해 등록된 키워드 목록을 조회하고 표시한다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-02,키워드 생성,KeywordCreateRequest를 통해 새로운 키워드를 생성한다. 키워드 가중치 타입을 입력받는다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-03,키워드 수정,KeywordUpdateRequest를 통해 기존 키워드의 가중치 타입 활성화 상태를 수정한다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-04,키워드 삭제,선택한 키워드를 삭제할 수 있다. 삭제 전 확인 과정을 거친다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-05,키워드 타입 분류,KeywordType(IMPORTANT NORMAL NEGATIVE) 중 하나로 키워드를 분류한다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-06,키워드 가중치 설정,감성 분석에 사용될 키워드의 가중치를 문자열 형태로 설정한다.
+REQ-ADM-006,키워드 관리,REQ-ADM-006-07,키워드 활성화 관리,키워드의 활성화/비활성화 상태를 관리하여 분석에 포함 여부를 결정한다.
+REQ-ADM-007,API 통신 및 데이터 관리,REQ-ADM-007-01,RESTful API 통신,Dio를 기반으로 한 ApiService를 통해 서버와 RESTful API 통신을 수행한다.
+REQ-ADM-007,API 통신 및 데이터 관리,REQ-ADM-007-02,API 응답 표준화,ApiResponse 모델을 통해 모든 API 응답을 표준화된 형태로 처리한다.
+REQ-ADM-007,API 통신 및 데이터 관리,REQ-ADM-007-03,페이지네이션 지원,Pagination 모델을 통해 대량 데이터의 페이지 단위 조회를 지원한다.
+REQ-ADM-007,API 통신 및 데이터 관리,REQ-ADM-007-04,에러 응답 처리,ResponseException을 통해 API 에러를 구조화하여 처리한다.
+REQ-ADM-007,API 통신 및 데이터 관리,REQ-ADM-007-05,HTTP 인터셉터,AuthInterceptor를 통해 모든 API 요청에 자동으로 Authorization 헤더를 추가한다.
+REQ-ADM-008,상태 관리,REQ-ADM-008-01,Riverpod 상태 관리,앱 전역 상태를 Riverpod Provider를 통해 관리한다.
+REQ-ADM-008,상태 관리,REQ-ADM-008-02,코드 생성 기반 Provider,@riverpod 애너테이션을 통한 자동 코드 생성으로 Provider를 구현한다.
+REQ-ADM-008,상태 관리,REQ-ADM-008-03,ViewModel 패턴,각 화면별 비즈니스 로직을 ViewModel 클래스로 분리하여 관리한다.
+REQ-ADM-008,상태 관리,REQ-ADM-008-04,상태 모델 정의,Freezed를 활용한 불변 상태 모델로 UI 상태를 관리한다.
+REQ-ADM-009,로컬 저장소 관리,REQ-ADM-009-01,SharedPreferences 통합,LocalStorageService를 통해 SharedPreferences를 추상화하여 사용한다.
+REQ-ADM-009,로컬 저장소 관리,REQ-ADM-009-02,토큰 저장,accessToken과 refreshToken을 로컬 저장소에 안전하게 저장한다.
+REQ-ADM-009,로컬 저장소 관리,REQ-ADM-009-03,토큰 관리,토큰 조회 저장 삭제 기능을 제공한다.
+REQ-ADM-009,로컬 저장소 관리,REQ-ADM-009-04,초기화 관리,앱 시작 시 LocalStorageService 초기화를 보장한다.
+REQ-ADM-010,UI/UX 설계,REQ-ADM-010-01,반응형 웹 디자인,Flutter ScreenUtil을 활용하여 다양한 화면 크기에 대응하는 반응형 디자인을 구현한다.
+REQ-ADM-010,UI/UX 설계,REQ-ADM-010-02,머티리얼 디자인,Material Design 가이드라인을 따르는 일관된 UI를 제공한다.
+REQ-ADM-010,UI/UX 설계,REQ-ADM-010-03,테마 시스템,DefaultTheme을 통해 앱 전체의 일관된 색상과 스타일을 관리한다.
+REQ-ADM-010,UI/UX 설계,REQ-ADM-010-04,컴포넌트 재사용,AuthButton AuthTextField 등 재사용 가능한 위젯 컴포넌트를 구현한다.
+REQ-ADM-010,UI/UX 설계,REQ-ADM-010-05,로딩 상태 표시,API 통신 중 사용자에게 로딩 상태를 시각적으로 표시한다.
+REQ-ADM-011,폼 검증 및 입력 관리,REQ-ADM-011-01,입력 검증,Validators 유틸리티를 통해 이메일 비밀번호 등의 입력값을 검증한다.
+REQ-ADM-011,폼 검증 및 입력 관리,REQ-ADM-011-02,검증 상수 관리,ValidationConstants를 통해 검증 규칙을 중앙집중식으로 관리한다.
+REQ-ADM-011,폼 검증 및 입력 관리,REQ-ADM-011-03,실시간 검증,사용자 입력 중 실시간으로 검증 결과를 표시한다.
+REQ-ADM-011,폼 검증 및 입력 관리,REQ-ADM-011-04,에러 메시지 표시,검증 실패 시 구체적이고 이해하기 쉬운 에러 메시지를 표시한다.
+REQ-ADM-012,코드 생성 및 관리,REQ-ADM-012-01,Freezed 코드 생성,불변 데이터 클래스 자동 생성을 통해 타입 안정성을 보장한다.
+REQ-ADM-012,코드 생성 및 관리,REQ-ADM-012-02,JSON 직렬화,json_annotation과 json_serializable을 통한 자동 JSON 직렬화/역직렬화를 지원한다.
+REQ-ADM-012,코드 생성 및 관리,REQ-ADM-012-03,라우트 코드 생성,auto_route_generator를 통한 타입 안전 라우팅 코드를 자동 생성한다.
+REQ-ADM-012,코드 생성 및 관리,REQ-ADM-012-04,Riverpod Provider 생성,riverpod_generator를 통한 Provider 코드를 자동 생성한다.
+REQ-ADM-013,개발 도구 지원,REQ-ADM-013-01,Build Runner 워치 모드,개발 중 코드 변경 시 자동으로 생성 코드를 업데이트하는 워치 모드를 지원한다.
+REQ-ADM-013,개발 도구 지원,REQ-ADM-013-02,린트 및 분석,flutter_lints와 riverpod_lint를 통해 코드 품질을 관리한다.
+REQ-ADM-013,개발 도구 지원,REQ-ADM-013-03,스크립트 자동화,configure.sh code_generator.sh 등의 스크립트를 통해 개발 환경 설정을 자동화한다.
+REQ-ADM-013,개발 도구 지원,REQ-ADM-013-04,플랫폼 간 스크립트 지원,.sh(Unix/macOS)와 .bat(Windows) 스크립트를 모두 제공하여 크로스 플랫폼 개발을 지원한다.
+REQ-ADM-014,보안 및 권한 관리,REQ-ADM-014-01,JWT 토큰 보안,JWT 토큰을 안전하게 저장하고 전송한다.
+REQ-ADM-014,보안 및 권한 관리,REQ-ADM-014-02,API 요청 인증,모든 보호된 API 요청에 Bearer 토큰을 자동으로 포함한다.
+REQ-ADM-014,보안 및 권한 관리,REQ-ADM-014-03,토큰 만료 처리,토큰 만료 시 자동으로 갱신하거나 재로그인을 유도한다.
+REQ-ADM-014,보안 및 권한 관리,REQ-ADM-014-04,권한 기반 접근 제어,사용자 역할에 따른 기능 접근 권한을 제어한다.
+REQ-ADM-015,에러 처리 및 사용자 피드백,REQ-ADM-015-01,전역 에러 핸들링,앱 전체에서 발생하는 에러를 일관된 방식으로 처리한다.
+REQ-ADM-015,에러 처리 및 사용자 피드백,REQ-ADM-015-02,네트워크 에러 처리,네트워크 연결 실패 타임아웃 등의 네트워크 관련 에러를 적절히 처리한다.
+REQ-ADM-015,에러 처리 및 사용자 피드백,REQ-ADM-015-03,사용자 친화적 에러 메시지,기술적인 에러를 사용자가 이해하기 쉬운 메시지로 변환하여 표시한다.
+REQ-ADM-015,에러 처리 및 사용자 피드백,REQ-ADM-015-04,재시도 메커니즘,일시적인 네트워크 오류에 대해 자동 재시도 기능을 제공한다.
