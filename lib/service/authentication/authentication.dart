@@ -7,7 +7,6 @@ import 'package:xrp_monitor_flutter_admin/service/storage/local_storage_service.
 import 'models/login_request.dart';
 import 'models/auth_model.dart';
 
-
 part 'authentication.g.dart';
 
 @Riverpod(keepAlive: true)
@@ -28,16 +27,18 @@ class Authentication extends _$Authentication {
         token: accessToken,
         expiredAt: DateTime.now().add(const Duration(hours: 3)),
       ),
-      refreshToken: refreshToken != null ? Token(
-        token: refreshToken,
-        expiredAt: DateTime.now().add(const Duration(days: 30)),
-      ) : null,
+      refreshToken:
+          refreshToken != null
+              ? Token(
+                token: refreshToken,
+                expiredAt: DateTime.now().add(const Duration(days: 30)),
+              )
+              : null,
       user: null,
     );
     state = AsyncValue.data(session);
     return session;
   }
-
 
   //#region Sign in
   Future<LoginUser?> singInAfter(LoginResult data) async {
@@ -47,23 +48,17 @@ class Authentication extends _$Authentication {
     session = Session(
       accessToken: Token(
         token: data.accessToken,
-        expiredAt: DateTime.now().add(const Duration(hours: 48)
-        ),
+        expiredAt: DateTime.now().add(const Duration(hours: 48)),
       ),
       refreshToken: Token(
         token: data.refreshToken,
-        expiredAt: DateTime.now().add(const Duration(days: 30)
-        ),
+        expiredAt: DateTime.now().add(const Duration(days: 30)),
       ),
-      user:data.user,
+      user: data.user,
     );
     state = AsyncValue.data(session);
     return data.user;
   }
-
-
-
-
 
   void updateToken(String newAccessToken, String newRefreshToken) {
     final Token accessToken = Token(
@@ -75,11 +70,12 @@ class Authentication extends _$Authentication {
       expiredAt: DateTime.now().add(const Duration(hours: 48)),
     );
     state = state.whenData(
-          (session) => session?.copyWith(
-        accessToken: accessToken, refreshToken: refreshToken,),
+      (session) => session?.copyWith(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      ),
     );
   }
-
 
   void removeSession() {
     LocalStorageService.instance.removeAllToken();
@@ -88,27 +84,23 @@ class Authentication extends _$Authentication {
 
   void removeAccessSession() {
     LocalStorageService.instance.removeAccessToken();
-    state = state.whenData(
-          (session) => session?.copyWith(accessToken: null),
-    );
+    state = state.whenData((session) => session?.copyWith(accessToken: null));
   }
-
 
   Future<ResponseModel<LoginResult>> login(LoginRequest request) async {
     try {
-      final ResponseModel<LoginResult> response = await _sessionService.login(request);
+      final ResponseModel<LoginResult> response = await _sessionService.login(
+        request,
+      );
       if (response.success && response.result != null) {
         await singInAfter(response.result!);
       }
-      return ResponseModel<LoginResult>(
-          success: true,
-          result: response.result!,
-          type: ResponseType.success
-      );
+      return response;
     } catch (e) {
       return ResponseModel<LoginResult>(
         success: false,
         type: ResponseType.alert,
+        content: e.toString(),
       );
     }
   }
@@ -116,6 +108,4 @@ class Authentication extends _$Authentication {
   Future<void> logout() async {
     removeSession();
   }
-
-
 }

@@ -17,6 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 
 superadmin@xrpmonitor.com
-superadmin123!
+superadmin123
 fvm flutter run -d chrome --web-port 8080
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:xrp_monitor_flutter_admin/ui/layout/common_style.dart';
 
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -27,8 +26,8 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 42),
       child: TextFormField(
         controller: controller,
         style: const TextStyle(fontSize: 13),
@@ -37,23 +36,32 @@ class AuthTextField extends StatelessWidget {
           hintText: hintText,
           labelStyle: const TextStyle(fontSize: 12),
           hintStyle: const TextStyle(fontSize: 12),
+          errorStyle: const TextStyle(fontSize: 11, height: 1.2),
+          errorMaxLines: 2,
           prefixIcon: Icon(prefixIcon, size: 18),
-          suffixIcon: suffixIcon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+          prefixIconConstraints: const BoxConstraints(
+            minWidth: 40,
+            minHeight: 40,
           ),
+          suffixIcon: suffixIcon,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 1.5),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 8,
+          ),
           filled: true,
           fillColor: Colors.grey.shade50,
         ),
         keyboardType: keyboardType,
         obscureText: obscureText,
         validator: validator,
-        autovalidateMode: autovalidateMode ?? AutovalidateMode.onUserInteraction,
+        autovalidateMode:
+            autovalidateMode ?? AutovalidateMode.onUserInteraction,
       ),
     );
   }
