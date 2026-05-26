@@ -1,15 +1,9 @@
-enum ServerType {
-  dev,
-  beta,
-  prod,
-}
+enum ServerType { dev, beta, prod }
 
 class ApiPath {
-
-  static const String devDomain = 'http://168.107.30.242:3000';
-  static const String betaDomain = 'http://168.107.30.242:3000';
-  static const String prodDomain = 'http://168.107.30.242:3000';
-
+  static const String devDomain = 'https://xrp-monitor.p-e.kr';
+  static const String betaDomain = 'https://xrp-monitor.p-e.kr';
+  static const String prodDomain = 'https://xrp-monitor.p-e.kr';
 
   static ServerType currentServer = ServerType.dev;
 
@@ -29,8 +23,6 @@ class ApiPath {
     url += '/';
     return url;
   }
-
-
 
   static void setServerType(ServerType type) {
     currentServer = type;
