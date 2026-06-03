@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:xrp_monitor_flutter_admin/core/constants/api_path.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/api_response.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
-import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_list_response.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_role.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_create_request.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_exception.dart';
@@ -16,49 +15,44 @@ class UserService extends _$UserService {
   late final ApiService _apiService = ref.read(apiServiceProvider.notifier);
 
   @override
-  void build() {
-    
-  }
+  void build() {}
 
-  Future<ResponseModel<List<User>>> getUsers({UserRole? role}) async {
+  Future<ResponseModel<List<User>>> getUsers({
+    int page = 1,
+    int perPage = 10,
+    UserRole? role,
+  }) async {
     try {
       String url = '${ApiPath.apiUrl}admin/users';
 
       final response = await _apiService.get(
-          url: url,
-          params: {
-            'role': 'USER'
-          }
+        url: url,
+        params: {
+          'page': page,
+          'perPage': perPage,
+          'role': (role ?? UserRole.USER).value,
+        },
       );
       if (response.statusCode == 200 || response.statusCode == 304) {
         final ApiResponse apiResponse = ApiResponse.fromJson(response.data!);
-        if(apiResponse.result?.list != null){
-          final List<User>  data = [];
-          for (final Map<String, dynamic> item in apiResponse.result?.list as List) {
+        if (apiResponse.result?.list != null) {
+          final List<User> data = [];
+          for (final Map<String, dynamic> item
+              in apiResponse.result?.list as List) {
             data.add(User.fromJson(item));
           }
           return ResponseModel(
-              success: true,
-              type: ResponseType.success,
-              result: data,
-              page: apiResponse.result!.page);
-        }else{
+            success: true,
+            type: ResponseType.success,
+            result: data,
+            page: apiResponse.result!.page,
+          );
+        } else {
           return throw ResponseException(
-            ResponseModel(
-              success: false,
-              type: ResponseType.alert,
-            ),
+            ResponseModel(success: false, type: ResponseType.alert),
           );
         }
-
-        return throw ResponseException(
-          ResponseModel(
-            success: false,
-            type: ResponseType.alert,
-          ),
-        );
-
-      }else{
+      } else {
         return throw ResponseException(
           ResponseModel(
             success: false,
@@ -74,7 +68,7 @@ class UserService extends _$UserService {
           type: ResponseType.alert,
           title: '사용자 목록 조회 실패',
           content: err.toString(),
-        )
+        ),
       );
     }
   }
@@ -111,7 +105,10 @@ class UserService extends _$UserService {
     }
   }
 
-  Future<ResponseModel<bool>> updateUser(int id, UpdateUserRequest request) async {
+  Future<ResponseModel<bool>> updateUser(
+    int id,
+    UpdateUserRequest request,
+  ) async {
     try {
       final response = await _apiService.put(
         url: '${ApiPath.apiUrl}admin/users/$id',
@@ -146,7 +143,7 @@ class UserService extends _$UserService {
   Future<ResponseModel<bool>> deleteUser(int id) async {
     try {
       final response = await _apiService.delete(
-        url: '${ApiPath.apiUrl}admin/users/$id'
+        url: '${ApiPath.apiUrl}admin/users/$id',
       );
       if (response.statusCode == 200) {
         return ResponseModel<bool>(

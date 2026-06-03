@@ -22,8 +22,10 @@ class UserViewModel extends _$UserViewModel {
 
   Future<UserState> _fetchUsers({UserRole? role}) async {
     try {
-      final ResponseModel<List<User>> response = await _userService.getUsers();
-      
+      final ResponseModel<List<User>> response = await _userService.getUsers(
+        role: role,
+      );
+
       if (response.success && response.result != null) {
         return UserState(
           users: response.result!,
@@ -35,16 +37,12 @@ class UserViewModel extends _$UserViewModel {
           users: const [],
           pageInfo: response.page,
           isLoading: false,
-          error: response.content ?? '사용자 목록을 불러올 수 없습니다.',
+          error: response.content,
         );
       }
     } catch (e) {
       log('UserViewModel _fetchUsers error: $e');
-      return UserState(
-        users: const [],
-        isLoading: false,
-        error: e.toString(),
-      );
+      return UserState(users: const [], isLoading: false, error: e.toString());
     }
   }
 
@@ -90,7 +88,10 @@ class UserViewModel extends _$UserViewModel {
   }
 
   // 사용자 정보 수정
-  Future<ResponseModel<bool>> updateUser(int id, UpdateUserRequest request) async {
+  Future<ResponseModel<bool>> updateUser(
+    int id,
+    UpdateUserRequest request,
+  ) async {
     try {
       final response = await _userService.updateUser(id, request);
       if (response.success) {
@@ -123,7 +124,7 @@ class UserViewModel extends _$UserViewModel {
         success: false,
         result: false,
         type: ResponseType.alert,
-        title: "사용자 삭제 오류",  
+        title: "사용자 삭제 오류",
         content: e.toString(),
       );
     }
