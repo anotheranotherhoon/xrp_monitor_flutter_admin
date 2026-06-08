@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/keyword_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/user_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/version/version_management_page.dart';
+import 'package:xrp_monitor_flutter_admin/ui/screen/popup/popup_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/service/authentication/authentication.dart';
 import 'package:xrp_monitor_flutter_admin/core/route/app_router.gr.dart';
 
@@ -15,7 +16,7 @@ class DashboardScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<int> selectedIndex = useState<int>(0);
-    
+
     return Scaffold(
       body: Row(
         children: [
@@ -48,7 +49,7 @@ class DashboardScreen extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                
+
                 // 메뉴 영역
                 Expanded(
                   child: ListView(
@@ -77,10 +78,18 @@ class DashboardScreen extends HookConsumerWidget {
                         icon: Icons.analytics,
                         title: '키워드 관리',
                       ),
+                      _buildMenuItem(
+                        context,
+                        index: 3,
+                        selectedIndex: selectedIndex.value,
+                        onTap: () => selectedIndex.value = 3,
+                        icon: Icons.photo_library,
+                        title: '팝업 관리',
+                      ),
                     ],
                   ),
                 ),
-                
+
                 // 로그아웃 버튼
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -88,14 +97,8 @@ class DashboardScreen extends HookConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () => _showLogoutDialog(context, ref),
-                      icon: const Icon(
-                        Icons.logout,
-                        size: 16,
-                      ),
-                      label: const Text(
-                        '로그아웃',
-                        style: TextStyle(fontSize: 12),
-                      ),
+                      icon: const Icon(Icons.logout, size: 16),
+                      label: const Text('로그아웃', style: TextStyle(fontSize: 12)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF374151),
                         foregroundColor: Colors.white,
@@ -107,7 +110,7 @@ class DashboardScreen extends HookConsumerWidget {
               ],
             ),
           ),
-          
+
           // 메인 콘텐츠 영역
           Expanded(
             child: Column(
@@ -119,10 +122,7 @@ class DashboardScreen extends HookConsumerWidget {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     border: Border(
-                      bottom: BorderSide(
-                        color: Color(0xFFE5E7EB),
-                        width: 1,
-                      ),
+                      bottom: BorderSide(color: Color(0xFFE5E7EB), width: 1),
                     ),
                   ),
                   child: Row(
@@ -149,7 +149,7 @@ class DashboardScreen extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                
+
                 // 페이지 콘텐츠
                 Expanded(
                   child: Container(
@@ -174,7 +174,7 @@ class DashboardScreen extends HookConsumerWidget {
     required String title,
   }) {
     final isSelected = index == selectedIndex;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
       child: Material(
@@ -201,7 +201,8 @@ class DashboardScreen extends HookConsumerWidget {
                   style: TextStyle(
                     color: isSelected ? Colors.white : const Color(0xFF9CA3AF),
                     fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
                   ),
                 ),
               ],
@@ -220,6 +221,8 @@ class DashboardScreen extends HookConsumerWidget {
         return '버전 관리';
       case 2:
         return '키워드 관리';
+      case 3:
+        return '팝업 관리';
       default:
         return '';
     }
@@ -233,6 +236,8 @@ class DashboardScreen extends HookConsumerWidget {
         return const VersionManagementPage();
       case 2:
         return const KeywordManagementPage();
+      case 3:
+        return const PopupManagementPage();
       default:
         return const SizedBox.shrink();
     }
@@ -245,15 +250,9 @@ class DashboardScreen extends HookConsumerWidget {
         return AlertDialog(
           title: const Text(
             '로그아웃',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          content: const Text(
-            '정말 로그아웃하시겠습니까?',
-            style: TextStyle(fontSize: 14),
-          ),
+          content: const Text('정말 로그아웃하시겠습니까?', style: TextStyle(fontSize: 14)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -263,10 +262,7 @@ class DashboardScreen extends HookConsumerWidget {
               style: TextButton.styleFrom(
                 foregroundColor: const Color(0xFF6B7280),
               ),
-              child: const Text(
-                '취소',
-                style: TextStyle(fontSize: 14),
-              ),
+              child: const Text('취소', style: TextStyle(fontSize: 14)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -284,10 +280,7 @@ class DashboardScreen extends HookConsumerWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                '로그아웃',
-                style: TextStyle(fontSize: 14),
-              ),
+              child: const Text('로그아웃', style: TextStyle(fontSize: 14)),
             ),
           ],
         );

@@ -13,16 +13,18 @@ class ApiService extends _$ApiService {
 
   @override
   void build() {
-    _dio = Dio(BaseOptions(
-      baseUrl: ApiPath.apiDomain,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiPath.apiDomain,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
     _dio.interceptors.add(AuthInterceptor(ref: ref));
   }
 
@@ -31,15 +33,17 @@ class ApiService extends _$ApiService {
     required Map<String, dynamic>? params,
   }) {
     if (params != null) {
-      final queryString = params.entries.map((entry) {
-        final key = entry.key;
-        final value = entry.value;
-        if (value is List) {
-          return value.map((item) => '$key[]=$item').join('&');
-        } else {
-          return '$key=${value.toString()}';
-        }
-      }).join('&');
+      final queryString = params.entries
+          .map((entry) {
+            final key = entry.key;
+            final value = entry.value;
+            if (value is List) {
+              return value.map((item) => '$key[]=$item').join('&');
+            } else {
+              return '$key=${value.toString()}';
+            }
+          })
+          .join('&');
 
       if (queryString.isNotEmpty) {
         return '$url?$queryString';
@@ -106,6 +110,19 @@ class ApiService extends _$ApiService {
     }
   }
 
+  Future<Response<Map<String, dynamic>>> postForm({
+    required String url,
+    required FormData formData,
+  }) async {
+    final token = LocalStorageService.instance.getAccessToken();
+    return _dio.post<Map<String, dynamic>>(
+      url,
+      data: formData,
+      options: Options(
+        headers: {if (token != null) 'Authorization': 'Bearer $token'},
+      ),
+    );
+  }
 
   Future<Response<Map<String, dynamic>>> patch({
     required String url,
@@ -183,5 +200,19 @@ class ApiService extends _$ApiService {
       log(err.toString());
       return throw Exception(err);
     }
+  }
+
+  Future<Response<Map<String, dynamic>>> putForm({
+    required String url,
+    required FormData formData,
+  }) async {
+    final token = LocalStorageService.instance.getAccessToken();
+    return _dio.put<Map<String, dynamic>>(
+      url,
+      data: formData,
+      options: Options(
+        headers: {if (token != null) 'Authorization': 'Bearer $token'},
+      ),
+    );
   }
 }

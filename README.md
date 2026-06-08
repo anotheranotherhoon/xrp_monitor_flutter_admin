@@ -1,6 +1,7 @@
 # XRP Monitor Flutter Admin
 
-XRP Monitor 시스템의 관리자 웹 대시보드입니다. 사용자, 키워드, 버전 관리 및 시스템 모니터링 기능을 제공합니다.
+XRP Monitor 시스템의 관리자 웹 대시보드입니다. 사용자, 키워드, 버전,
+팝업 관리 및 시스템 모니터링 기능을 제공합니다.
 
 ## 🔗 Links
 
@@ -45,6 +46,26 @@ cd xrp_monitor_flutter_admin
 **개발 서버 실행**
 ```bash
 fvm flutter run -d chrome --web-port 8080
+```
+
+로컬 NestJS 서버의 최신 코드를 바로 확인하려면 서버를 먼저 실행합니다.
+
+```bash
+# xrp_monitor_nest_server
+npm run start:dev
+
+# xrp_monitor_flutter_admin
+fvm flutter run -d chrome --web-port 8080
+```
+
+Debug/Profile 실행은 `http://localhost:3000`, Release 빌드는
+`https://xrp-monitor.p-e.kr`을 자동으로 사용합니다.
+
+로컬 DB에도 관리자 계정이 있어야 로그인할 수 있습니다. NestJS 저장소에서
+다음 명령을 실행하면 기본 슈퍼관리자를 생성하거나 기존 계정을 갱신합니다.
+
+```bash
+npm run create-super-admin
 ```
 
 **코드 생성기 (권장: 별도 터미널에서 실행)**
@@ -111,6 +132,10 @@ fvm flutter clean
 - **shared_preferences**: 로컬 스토리지 (토큰 저장)
 - **jwt_decoder**: JWT 토큰 디코딩
 
+### File Upload
+- **file_picker**: 팝업 이미지 선택
+- **Dio FormData**: 인증 토큰을 포함한 이미지 multipart 업로드
+
 ### Dev Tools
 - **commitlint & husky**: Git commit 메시지 검증
 - **flutter_lints**: Dart/Flutter 린팅 규칙
@@ -130,6 +155,7 @@ lib/
 │       ├── base/           # 기본 API 인프라
 │       ├── user/           # 사용자 관리
 │       ├── keyword/        # 키워드 관리
+│       ├── popup/          # 팝업 모델, API 서비스
 │       └── version/        # 버전 관리
 ├── service/                # 애플리케이션 레벨 서비스
 │   ├── authentication/     # 인증 상태 관리
@@ -142,6 +168,19 @@ lib/
 ├── utils/                  # 일반 유틸리티
 └── widgets/                # 재사용 가능한 위젯
 ```
+
+## 🖼️ Popup Management
+
+- 관리자 메뉴에서 팝업 등록, 수정, 삭제, 활성화 상태 변경
+- JPG, PNG, WebP 이미지 업로드 및 미리보기
+- 최대 10개 팝업과 `1~10` 노출 순서 설정
+- DatePicker와 TimePicker를 이용한 시작일/종료일 설정
+- 날짜를 `yyyy-MM-dd HH:mm:ss`로 표시하고 API에는 UTC ISO 형식으로 전송
+- 현재 시간에 따라 `노출 예정`, `노출 중`, `노출 종료`, `비활성` 상태 표시
+- 이미지 클릭 동작을 라디오 버튼으로 `이동 없음` 또는 `외부 링크`로 설정
+- 외부 링크 선택 시 `http://` 또는 `https://` URL 검증
+- Debug/Profile은 로컬 API와 로컬 이미지 저장소, Release는 운영 API와 OCI
+  Object Storage 사용
 
 ## 🔐 Authentication Flow
 
