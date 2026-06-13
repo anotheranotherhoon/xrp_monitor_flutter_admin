@@ -1,9 +1,14 @@
 name: Deploy Flutter Web to Oracle Cloud
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
+
+concurrency:
+  group: admin-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -27,22 +32,56 @@ jobs:
       - name: Build Flutter Web
         run: flutter build web
 
-      - name: Deploy to VM
+      - name: Prepare release directory
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.OCI_HOST }}
           username: ${{ secrets.OCI_USERNAME }}
           key: ${{ secrets.OCI_SSH_KEY }}
           script: |
-            rm -rf ~/flutter-web/web
-            mkdir -p ~/flutter-web/web
+            set -eu
+            RELEASE_DIR="$HOME/flutter-web/releases/${{ github.sha }}"
+            rm -rf "$RELEASE_DIR"
+            mkdir -p "$RELEASE_DIR"
 
-      - name: Copy files to VM
+      - name: Upload release files
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.OCI_HOST }}
           username: ${{ secrets.OCI_USERNAME }}
           key: ${{ secrets.OCI_SSH_KEY }}
           source: "build/web/*"
-          target: "~/flutter-web/web"
+          target: "~/flutter-web/releases/${{ github.sha }}"
           strip_components: 2
+
+      - name: Activate release
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.OCI_HOST }}
+          username: ${{ secrets.OCI_USERNAME }}
+          key: ${{ secrets.OCI_SSH_KEY }}
+          script: |
+            set -eu
+            RELEASE_DIR="$HOME/flutter-web/releases/${{ github.sha }}"
+            DEPLOY_DIR="$HOME/flutter-web/web"
+            PREVIOUS_DIR="$HOME/flutter-web/web.previous"
+
+            test -f "$RELEASE_DIR/index.html"
+            test -f "$RELEASE_DIR/flutter_bootstrap.js"
+            chmod -R a+rX "$RELEASE_DIR"
+
+            rm -rf "$PREVIOUS_DIR"
+            if [ -d "$DEPLOY_DIR" ]; then
+              mv "$DEPLOY_DIR" "$PREVIOUS_DIR"
+            fi
+            mv "$RELEASE_DIR" "$DEPLOY_DIR"
+
+            test -r "$DEPLOY_DIR/index.html"
+
+      - name: Verify production
+        run: |
+          curl --fail --show-error --silent \
+            --retry 5 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            https://xrp-admin.p-e.kr/ > /dev/null
