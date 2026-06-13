@@ -21,7 +21,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: "3.x"
 
       - name: Install dependencies
         run: flutter pub get
@@ -77,6 +77,9 @@ jobs:
             mv "$RELEASE_DIR" "$DEPLOY_DIR"
 
             test -r "$DEPLOY_DIR/index.html"
+            docker restart flutter-web
+            docker exec flutter-web test -r /usr/share/nginx/html/index.html
+            docker exec flutter-web nginx -t
 
       - name: Verify production
         run: |
