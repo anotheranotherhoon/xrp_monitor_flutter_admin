@@ -71,13 +71,13 @@ jobs:
             chmod -R a+rX "$RELEASE_DIR"
 
             rm -rf "$PREVIOUS_DIR"
-            if [ -d "$DEPLOY_DIR" ]; then
-              mv "$DEPLOY_DIR" "$PREVIOUS_DIR"
-            fi
-            mv "$RELEASE_DIR" "$DEPLOY_DIR"
+            mkdir -p "$PREVIOUS_DIR" "$DEPLOY_DIR"
+            cp -a "$DEPLOY_DIR/." "$PREVIOUS_DIR/"
+            find "$DEPLOY_DIR" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
+            cp -a "$RELEASE_DIR/." "$DEPLOY_DIR/"
+            rm -rf "$RELEASE_DIR"
 
             test -r "$DEPLOY_DIR/index.html"
-            docker restart flutter-web
             docker exec flutter-web test -r /usr/share/nginx/html/index.html
             docker exec flutter-web nginx -t
 
