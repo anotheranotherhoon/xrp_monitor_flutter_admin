@@ -78,8 +78,41 @@ jobs:
             rm -rf "$RELEASE_DIR"
 
             test -r "$DEPLOY_DIR/index.html"
-            docker exec flutter-web test -r /usr/share/nginx/html/index.html
-            docker exec flutter-web nginx -t
+
+            CONTAINER_STATUS="$(docker inspect --format='{{.State.Status}}' flutter-web)"
+            if [ "$CONTAINER_STATUS" != "running" ]; then
+              RESTART_POLICY="$(docker inspect --format='{{.HostConfig.RestartPolicy.Name}}' flutter-web)"
+              docker update --restart=no flutter-web > /dev/null
+              docker stop --time 10 flutter-web > /dev/null 2>&1 || true
+              docker start flutter-web > /dev/null
+
+              ATTEMPT=0
+              while [ "$ATTEMPT" -lt 30 ]; do
+                CONTAINER_STATUS="$(docker inspect --format='{{.State.Status}}' flutter-web)"
+                if [ "$CONTAINER_STATUS" = "running" ]; then
+                  break
+                fi
+                ATTEMPT=$((ATTEMPT + 1))
+                sleep 1
+              done
+
+              if [ "$RESTART_POLICY" != "no" ]; then
+                docker update --restart="$RESTART_POLICY" flutter-web > /dev/null
+              fi
+            fi
+
+            if [ "$CONTAINER_STATUS" != "running" ]; then
+              docker inspect --format='status={{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} error={{.State.Error}}' flutter-web
+              docker logs --tail=100 flutter-web
+              exit 1
+            fi
+
+            if ! docker exec flutter-web test -r /usr/share/nginx/html/index.html ||
+               ! docker exec flutter-web nginx -t; then
+              docker inspect --format='status={{.State.Status}} exit={{.State.ExitCode}} oom={{.State.OOMKilled}} error={{.State.Error}}' flutter-web
+              docker logs --tail=100 flutter-web
+              exit 1
+            fi
 
       - name: Verify production
         run: |
