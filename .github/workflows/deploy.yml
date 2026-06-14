@@ -79,6 +79,19 @@ jobs:
 
             test -r "$DEPLOY_DIR/index.html"
 
+            PROXY_NETWORK="xrp-monitor-proxy"
+            BACKEND_CONTAINER="$(docker ps --filter label=com.docker.compose.service=app --format='{{.ID}}' | head -n 1)"
+            if [ -z "$BACKEND_CONTAINER" ]; then
+              echo "Running NestJS Compose app container not found."
+              docker ps -a
+              exit 1
+            fi
+
+            docker network inspect "$PROXY_NETWORK" > /dev/null 2>&1 ||
+              docker network create "$PROXY_NETWORK" > /dev/null
+            docker network connect --alias nestjs "$PROXY_NETWORK" "$BACKEND_CONTAINER" > /dev/null 2>&1 || true
+            docker network connect "$PROXY_NETWORK" flutter-web > /dev/null 2>&1 || true
+
             CONTAINER_STATUS="$(docker inspect --format='{{.State.Status}}' flutter-web)"
             if [ "$CONTAINER_STATUS" != "running" ]; then
               RESTART_POLICY="$(docker inspect --format='{{.HostConfig.RestartPolicy.Name}}' flutter-web)"
