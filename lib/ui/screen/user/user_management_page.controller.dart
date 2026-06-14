@@ -1,9 +1,8 @@
 part of 'user_management_page.dart';
 
-class UserManagementPageController extends ConsumerWidgetController<UserManagementPage> {
-  UserManagementPageController({
-    required super.ref,
-  });
+class UserManagementPageController
+    extends ConsumerWidgetController<UserManagementPage> {
+  UserManagementPageController({required super.ref});
 
   @override
   void build(BuildContext context) {
@@ -17,7 +16,9 @@ class UserManagementPageController extends ConsumerWidgetController<UserManageme
   // 사용자 생성
   Future<bool> createUser(CreateUserRequest request) async {
     try {
-      final ResponseModel<bool> result = await ref.read(userViewModelProvider.notifier).createUser(request);
+      final ResponseModel<bool> result = await ref
+          .read(userViewModelProvider.notifier)
+          .createUser(request);
       if (result.success) {
         refresh();
         return true;
@@ -31,7 +32,9 @@ class UserManagementPageController extends ConsumerWidgetController<UserManageme
   // 사용자 수정
   Future<bool> updateUser(int id, UpdateUserRequest request) async {
     try {
-      final ResponseModel<bool> result = await ref.read(userViewModelProvider.notifier).updateUser(id, request);
+      final ResponseModel<bool> result = await ref
+          .read(userViewModelProvider.notifier)
+          .updateUser(id, request);
       if (result.success) {
         refresh();
         return true;
@@ -45,7 +48,9 @@ class UserManagementPageController extends ConsumerWidgetController<UserManageme
   // 사용자 삭제
   Future<bool> deleteUser(int id) async {
     try {
-      final ResponseModel<bool> result = await ref.read(userViewModelProvider.notifier).deleteUser(id);
+      final ResponseModel<bool> result = await ref
+          .read(userViewModelProvider.notifier)
+          .deleteUser(id);
       if (result.success) {
         refresh();
         return true;
@@ -54,6 +59,17 @@ class UserManagementPageController extends ConsumerWidgetController<UserManageme
     } catch (e) {
       return false;
     }
+  }
+
+  Future<bool> sendNotification({
+    required List<int> userIds,
+    required String title,
+    required String body,
+  }) async {
+    final ResponseModel<bool> result = await ref
+        .read(userViewModelProvider.notifier)
+        .sendNotification(userIds: userIds, title: title, body: body);
+    return result.success;
   }
 
   // 폼 유효성 검사

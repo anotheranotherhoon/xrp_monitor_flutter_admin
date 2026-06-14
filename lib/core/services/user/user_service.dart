@@ -170,4 +170,30 @@ class UserService extends _$UserService {
       );
     }
   }
+
+  Future<ResponseModel<bool>> sendNotification({
+    required List<int> userIds,
+    required String title,
+    required String body,
+  }) async {
+    try {
+      final response = await _apiService.post(
+        url: '${ApiPath.apiUrl}admin/notifications/send',
+        params: {'userIds': userIds, 'title': title, 'body': body},
+      );
+      return ResponseModel<bool>(
+        success: response.statusCode == 200 || response.statusCode == 201,
+        result: response.statusCode == 200 || response.statusCode == 201,
+        type: ResponseType.success,
+      );
+    } catch (err) {
+      return ResponseModel<bool>(
+        success: false,
+        result: false,
+        type: ResponseType.alert,
+        title: '알림 발송 실패',
+        content: err.toString(),
+      );
+    }
+  }
 }

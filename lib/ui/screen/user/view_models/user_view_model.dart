@@ -129,4 +129,16 @@ class UserViewModel extends _$UserViewModel {
       );
     }
   }
+
+  Future<ResponseModel<bool>> sendNotification({
+    required List<int> userIds,
+    required String title,
+    required String body,
+  }) {
+    return _userService.sendNotification(
+      userIds: userIds,
+      title: title,
+      body: body,
+    );
+  }
 }
