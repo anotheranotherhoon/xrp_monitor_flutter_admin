@@ -73,6 +73,22 @@ class UserService extends _$UserService {
     }
   }
 
+  Future<List<User>> getAllUsers({UserRole? role}) async {
+    const perPage = 100;
+    var page = 1;
+    var lastPage = 1;
+    final users = <User>[];
+
+    do {
+      final response = await getUsers(page: page, perPage: perPage, role: role);
+      users.addAll(response.result ?? const <User>[]);
+      lastPage = response.page?.lastPage ?? page;
+      page++;
+    } while (page <= lastPage);
+
+    return users;
+  }
+
   Future<ResponseModel<bool>> createUser(CreateUserRequest request) async {
     try {
       final response = await _apiService.post(
@@ -166,32 +182,6 @@ class UserService extends _$UserService {
         result: false,
         type: ResponseType.alert,
         title: "오류",
-        content: err.toString(),
-      );
-    }
-  }
-
-  Future<ResponseModel<bool>> sendNotification({
-    required List<int> userIds,
-    required String title,
-    required String body,
-  }) async {
-    try {
-      final response = await _apiService.post(
-        url: '${ApiPath.apiUrl}admin/notifications/send',
-        params: {'userIds': userIds, 'title': title, 'body': body},
-      );
-      return ResponseModel<bool>(
-        success: response.statusCode == 200 || response.statusCode == 201,
-        result: response.statusCode == 200 || response.statusCode == 201,
-        type: ResponseType.success,
-      );
-    } catch (err) {
-      return ResponseModel<bool>(
-        success: false,
-        result: false,
-        type: ResponseType.alert,
-        title: '알림 발송 실패',
         content: err.toString(),
       );
     }
