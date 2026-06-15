@@ -6,6 +6,7 @@ import 'package:xrp_monitor_flutter_admin/ui/screen/keyword/keyword_management_p
 import 'package:xrp_monitor_flutter_admin/ui/screen/user/user_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/version/version_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/ui/screen/popup/popup_management_page.dart';
+import 'package:xrp_monitor_flutter_admin/ui/screen/notification/notification_management_page.dart';
 import 'package:xrp_monitor_flutter_admin/service/authentication/authentication.dart';
 import 'package:xrp_monitor_flutter_admin/core/route/app_router.gr.dart';
 
@@ -67,22 +68,30 @@ class DashboardScreen extends HookConsumerWidget {
                         index: 1,
                         selectedIndex: selectedIndex.value,
                         onTap: () => selectedIndex.value = 1,
-                        icon: Icons.system_update,
-                        title: '버전 관리',
+                        icon: Icons.notifications,
+                        title: '알림 관리',
                       ),
                       _buildMenuItem(
                         context,
                         index: 2,
                         selectedIndex: selectedIndex.value,
                         onTap: () => selectedIndex.value = 2,
-                        icon: Icons.analytics,
-                        title: '키워드 관리',
+                        icon: Icons.system_update,
+                        title: '버전 관리',
                       ),
                       _buildMenuItem(
                         context,
                         index: 3,
                         selectedIndex: selectedIndex.value,
                         onTap: () => selectedIndex.value = 3,
+                        icon: Icons.analytics,
+                        title: '키워드 관리',
+                      ),
+                      _buildMenuItem(
+                        context,
+                        index: 4,
+                        selectedIndex: selectedIndex.value,
+                        onTap: () => selectedIndex.value = 4,
                         icon: Icons.photo_library,
                         title: '팝업 관리',
                       ),
@@ -218,10 +227,12 @@ class DashboardScreen extends HookConsumerWidget {
       case 0:
         return '회원 관리';
       case 1:
-        return '버전 관리';
+        return '알림 관리';
       case 2:
-        return '키워드 관리';
+        return '버전 관리';
       case 3:
+        return '키워드 관리';
+      case 4:
         return '팝업 관리';
       default:
         return '';
@@ -233,10 +244,12 @@ class DashboardScreen extends HookConsumerWidget {
       case 0:
         return const UserManagementPage();
       case 1:
-        return const VersionManagementPage();
+        return const NotificationManagementPage();
       case 2:
-        return const KeywordManagementPage();
+        return const VersionManagementPage();
       case 3:
+        return const KeywordManagementPage();
+      case 4:
         return const PopupManagementPage();
       default:
         return const SizedBox.shrink();

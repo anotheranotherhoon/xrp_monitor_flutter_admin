@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/base/models/response_model.dart';
 import 'package:xrp_monitor_flutter_admin/core/services/user/models/user_model.dart';
@@ -20,7 +19,6 @@ class UserManagementPage extends HookConsumerWidget {
       () => UserManagementPageController(ref: ref),
       context,
     );
-    final selectedUserIds = useState<Set<int>>(<int>{});
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,22 +33,6 @@ class UserManagementPage extends HookConsumerWidget {
         foregroundColor: Colors.black87,
         elevation: 1,
         actions: [
-          ElevatedButton.icon(
-            onPressed:
-                selectedUserIds.value.isEmpty
-                    ? null
-                    : () => _showNotificationDialog(
-                      context,
-                      controller,
-                      selectedUserIds,
-                    ),
-            icon: const Icon(Icons.notifications_active, size: 18),
-            label: Text(
-              '알림 발송 (${selectedUserIds.value.length})',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ),
-          const SizedBox(width: 8),
           ElevatedButton.icon(
             onPressed: () async {
               await _showCreateUserDialog(context, controller);
@@ -80,12 +62,7 @@ class UserManagementPage extends HookConsumerWidget {
             .watch(userViewModelProvider)
             .when(
               data: (UserState userState) {
-                return _buildContent(
-                  userState,
-                  ref,
-                  controller,
-                  selectedUserIds,
-                );
+                return _buildContent(userState, ref, controller);
               },
               loading: () => _buildLoading(),
               error: (error, stackTrace) => _buildError(error.toString()),
@@ -119,7 +96,6 @@ class UserManagementPage extends HookConsumerWidget {
     UserState userState,
     WidgetRef ref,
     UserManagementPageController controller,
-    ValueNotifier<Set<int>> selectedUserIds,
   ) {
     if (userState.users.isEmpty) {
       return _buildEmptyState();
@@ -130,16 +106,9 @@ class UserManagementPage extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(userState, selectedUserIds),
+          _buildHeader(userState),
           const SizedBox(height: 24),
-          Expanded(
-            child: _buildUserList(
-              userState.users,
-              ref,
-              controller,
-              selectedUserIds,
-            ),
-          ),
+          Expanded(child: _buildUserList(userState.users, ref, controller)),
         ],
       ),
     );
@@ -165,13 +134,7 @@ class UserManagementPage extends HookConsumerWidget {
     );
   }
 
-  Widget _buildHeader(
-    UserState userState,
-    ValueNotifier<Set<int>> selectedUserIds,
-  ) {
-    final userIds = userState.users.map((user) => user.key).toSet();
-    final allSelected =
-        userIds.isNotEmpty && userIds.every(selectedUserIds.value.contains);
+  Widget _buildHeader(UserState userState) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -198,20 +161,6 @@ class UserManagementPage extends HookConsumerWidget {
             ),
           ),
           const Spacer(),
-          Checkbox(
-            value: allSelected,
-            onChanged: (selected) {
-              final next = Set<int>.from(selectedUserIds.value);
-              if (selected == true) {
-                next.addAll(userIds);
-              } else {
-                next.removeAll(userIds);
-              }
-              selectedUserIds.value = next;
-            },
-          ),
-          const Text('현재 페이지 전체 선택'),
-          const SizedBox(width: 16),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
@@ -236,7 +185,6 @@ class UserManagementPage extends HookConsumerWidget {
     List<User> users,
     WidgetRef ref,
     UserManagementPageController controller,
-    ValueNotifier<Set<int>> selectedUserIds,
   ) {
     return Container(
       decoration: BoxDecoration(
@@ -256,13 +204,7 @@ class UserManagementPage extends HookConsumerWidget {
         separatorBuilder: (context, index) => const Divider(height: 1),
         itemBuilder: (context, index) {
           final User user = users[index];
-          return _buildUserCard(
-            context,
-            user,
-            ref,
-            controller,
-            selectedUserIds,
-          );
+          return _buildUserCard(context, user, ref, controller);
         },
       ),
     );
@@ -273,20 +215,11 @@ class UserManagementPage extends HookConsumerWidget {
     User user,
     WidgetRef ref,
     UserManagementPageController controller,
-    ValueNotifier<Set<int>> selectedUserIds,
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Checkbox(
-            value: selectedUserIds.value.contains(user.key),
-            onChanged: (selected) {
-              final next = Set<int>.from(selectedUserIds.value);
-              selected == true ? next.add(user.key) : next.remove(user.key);
-              selectedUserIds.value = next;
-            },
-          ),
           // 사용자 아바타
           CircleAvatar(
             radius: 24,
@@ -375,86 +308,6 @@ class UserManagementPage extends HookConsumerWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _showNotificationDialog(
-    BuildContext context,
-    UserManagementPageController controller,
-    ValueNotifier<Set<int>> selectedUserIds,
-  ) async {
-    final formKey = GlobalKey<FormState>();
-    final titleController = TextEditingController();
-    final bodyController = TextEditingController();
-
-    await showDialog<void>(
-      context: context,
-      builder:
-          (dialogContext) => AlertDialog(
-            title: Text('${selectedUserIds.value.length}명에게 알림 발송'),
-            content: SizedBox(
-              width: 420,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller: titleController,
-                      decoration: const InputDecoration(labelText: '제목'),
-                      maxLength: 100,
-                      validator:
-                          (value) =>
-                              value == null || value.trim().isEmpty
-                                  ? '제목을 입력하세요'
-                                  : null,
-                    ),
-                    TextFormField(
-                      controller: bodyController,
-                      decoration: const InputDecoration(labelText: '내용'),
-                      maxLength: 1000,
-                      minLines: 3,
-                      maxLines: 6,
-                      validator:
-                          (value) =>
-                              value == null || value.trim().isEmpty
-                                  ? '내용을 입력하세요'
-                                  : null,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: const Text('취소'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (formKey.currentState?.validate() != true) return;
-                  final success = await controller.sendNotification(
-                    userIds: selectedUserIds.value.toList(),
-                    title: titleController.text.trim(),
-                    body: bodyController.text.trim(),
-                  );
-                  if (!dialogContext.mounted) return;
-                  Navigator.pop(dialogContext);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        success ? 'FCM 알림을 발송했습니다' : 'FCM 알림 발송에 실패했습니다',
-                      ),
-                    ),
-                  );
-                  if (success) selectedUserIds.value = <int>{};
-                },
-                child: const Text('발송'),
-              ),
-            ],
-          ),
-    );
-    titleController.dispose();
-    bodyController.dispose();
   }
 
   String _formatDate(DateTime date) {

@@ -61,17 +61,6 @@ class UserManagementPageController
     }
   }
 
-  Future<bool> sendNotification({
-    required List<int> userIds,
-    required String title,
-    required String body,
-  }) async {
-    final ResponseModel<bool> result = await ref
-        .read(userViewModelProvider.notifier)
-        .sendNotification(userIds: userIds, title: title, body: body);
-    return result.success;
-  }
-
   // 폼 유효성 검사
   String? validateEmail(String? value) {
     if (value?.isEmpty == true) return '이메일을 입력하세요';
