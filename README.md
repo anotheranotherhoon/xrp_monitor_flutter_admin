@@ -1,7 +1,7 @@
 # XRP Monitor Flutter Admin
 
 XRP Monitor 시스템의 관리자 웹 대시보드입니다. 사용자, 키워드, 버전,
-팝업 관리 및 시스템 모니터링 기능을 제공합니다.
+팝업, FCM 알림 관리 및 시스템 모니터링 기능을 제공합니다.
 
 ## 🔗 Links
 
@@ -155,6 +155,7 @@ lib/
 │       ├── base/           # 기본 API 인프라
 │       ├── user/           # 사용자 관리
 │       ├── keyword/        # 키워드 관리
+│       ├── notification/   # FCM 발송, 이력 및 수신자 모델/API
 │       ├── popup/          # 팝업 모델, API 서비스
 │       └── version/        # 버전 관리
 ├── service/                # 애플리케이션 레벨 서비스
@@ -181,6 +182,51 @@ lib/
 - 외부 링크 선택 시 `http://` 또는 `https://` URL 검증
 - Debug/Profile은 로컬 API와 로컬 이미지 저장소, Release는 운영 API와 OCI
   Object Storage 사용
+
+## 🔔 FCM Notification Management
+
+대시보드의 `알림 관리` 메뉴에서 일반 회원에게 FCM 푸시 메시지를 발송하고
+처리 결과를 확인할 수 있습니다. 관리자 웹은 Firebase SDK로 직접 발송하지
+않으며, JWT가 포함된 NestJS 관리자 API를 호출합니다.
+
+### 회원 선택 및 발송
+
+- 페이지별 일반 회원 목록에서 체크박스로 개별 선택
+- 이메일 또는 닉네임으로 현재 페이지 검색
+- `전체 선택`으로 모든 USER 회원 페이지를 조회해 일괄 선택
+- `전체 선택 해제`로 현재까지 선택한 회원 전체 해제
+- 페이지를 이동해도 기존 선택 상태 유지
+- 제목은 최대 100자, 내용은 최대 1000자로 입력 후 발송
+- 선택 회원이 없으면 발송 요청 차단
+
+### 발송 이력
+
+- `GET /admin/notifications?page=1&perPage=10` 기반 페이지네이션
+- 제목, 본문, 선택 회원 수, 대상 기기 수, 성공/실패 수, 처리 상태와 발송 시각 표시
+- 실패한 발송은 서버가 저장한 오류 메시지 표시
+- 새 발송 완료 후 첫 페이지를 자동으로 다시 조회
+
+### 수신 회원 상세
+
+발송 내역 카드를 클릭하면
+`GET /admin/notifications/:id/recipients`를 호출하여 해당 알림을 어떤
+회원에게 보냈는지 확인합니다.
+
+- 회원 ID, 이메일, 닉네임과 현재 활성 상태 표시
+- 발송 후 삭제된 회원은 `삭제된 회원`과 기존 회원 ID로 표시
+- 발송 당시 저장된 회원 ID 순서를 기준으로 목록 구성
+
+### 주요 구현 파일
+
+| 파일 | 역할 |
+| ---- | ---- |
+| `lib/ui/screen/notification/notification_management_page.dart` | 알림 목록, 발송 폼, 회원 선택, 수신자 상세 UI |
+| `lib/core/services/notification/notification_service.dart` | 발송·이력·수신자 상세 API 호출 |
+| `lib/core/services/notification/models/notification_history.dart` | 발송 이력 및 수신 회원 모델 |
+| `lib/core/services/user/user_service.dart` | 페이지별/전체 일반 회원 조회 |
+
+알림 관리 API는 관리자 권한이 필요합니다. Debug/Profile 실행에서는
+`http://localhost:3000`, Release 빌드에서는 운영 API를 사용합니다.
 
 ## 🔐 Authentication Flow
 
